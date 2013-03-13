@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-idr-ls-distribution-02"
+<rfc category="std" docName="draft-ietf-idr-ls-distribution-03"
      ipr="trust200902">
   <front>
     <title abbrev="Link-State Info Distribution using BGP">North-Bound
@@ -18,103 +18,74 @@
 
     <author fullname="Hannes Gredler" initials="H." surname="Gredler">
       <organization>Juniper Networks, Inc.</organization>
-
       <address>
         <postal>
           <street>1194 N. Mathilda Ave.</street>
-
           <city>Sunnyvale</city>
-
           <region>CA</region>
-
           <code>94089</code>
-
           <country>US</country>
         </postal>
-
         <email>hannes@juniper.net</email>
       </address>
     </author>
 
     <author fullname="Jan Medved" initials="J." surname="Medved">
       <organization>Cisco Systems, Inc.</organization>
-
       <address>
         <postal>
           <street>170, West Tasman Drive</street>
-
           <city>San Jose</city>
-
           <region>CA</region>
-
           <code>95134</code>
-
           <country>US</country>
         </postal>
-
         <email>jmedved@cisco.com</email>
       </address>
     </author>
 
     <author fullname="Stefano Previdi" initials="S." surname="Previdi">
       <organization>Cisco Systems, Inc.</organization>
-
       <address>
         <postal>
           <street>Via Del Serafico, 200</street>
-
           <city>Rome</city>
-
           <code>00142</code>
-
           <country>Italy</country>
         </postal>
-
         <email>sprevidi@cisco.com</email>
       </address>
     </author>
 
     <author fullname="Adrian Farrel" initials="A." surname="Farrel">
       <organization>Juniper Networks, Inc.</organization>
-
       <address>
         <postal>
           <street>1194 N. Mathilda Ave.</street>
-
           <city>Sunnyvale</city>
-
           <region>CA</region>
-
           <code>94089</code>
-
           <country>US</country>
         </postal>
-
         <email>afarrel@juniper.net</email>
       </address>
     </author>
 
     <author fullname="Saikat Ray" initials="S." surname="Ray">
       <organization>Cisco Systems, Inc.</organization>
-
       <address>
         <postal>
           <street>170, West Tasman Drive</street>
-
           <city>San Jose</city>
-
           <region>CA</region>
-
           <code>95134</code>
-
           <country>US</country>
         </postal>
-
         <email>sairay@cisco.com</email>
       </address>
     </author>
 
-    <date day="24" month="February" year="2013" />
+    <date day="15" month="March" year="2013" />
 
     <workgroup>Inter-Domain Routing</workgroup>
 
@@ -437,13 +408,9 @@
 
         <t>The 'NLRI Type' field can contain one of the following values:
         <list style="hanging">
-            <t>Type = 1: Link NLRI, contains link descriptors and link
-            attributes</t>
-
-            <t>Type = 2: Node NLRI, contains node attributes</t>
-
+            <t>Type = 1: Link NLRI</t>
+            <t>Type = 2: Node NLRI</t>
             <t>Type = 3: IPv4 Topology Prefix NLRI</t>
-
             <t>Type = 4: IPv6 Topology Prefix NLRI</t>
           </list></t>
 
@@ -453,10 +420,11 @@
           <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  
-  |  Protocol-ID  |    Reserved   |                               |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
-  |                         Identifier (variable)                 |
+  +-+-+-+-+-+-+-+-+  
+  |  Protocol-ID  |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                           Identifier                          |
+  |                            (64 bits)                          |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+       
   |                Local Node Descriptors (variable)              |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -473,10 +441,11 @@
           <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+  
+  |  Protocol-ID  |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |  Protocol-ID  |    Reserved   |                               | 
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
-  |                       Identifier (variable)                   |
+  |                           Identifier                          |
+  |                            (64 bits)                          |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                Local Node Descriptors (variable)              |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -491,12 +460,15 @@
           <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+  
+  |  Protocol-ID  |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |  Protocol-ID  |    Reserved   |                               | 
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
-  |                    Identifier (variable)                      |
+  |                           Identifier                          |
+  |                            (64 bits)                          |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                    Local Node Descriptor (variable)           |
+  |               Local Node Descriptor (variable)                |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                 Prefix Descriptors (variable)                 |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |  Reachability information (variable; one or more prefixes)    |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -528,122 +500,35 @@
         over the same link. See <xref target="RFC6822"></xref> and <xref
         target="RFC6549"></xref>.</t>
 
-        <t>Identifier TLV is a mandatory TLV containing identifiers of the
-        NLRI and used to associate the NLRI to an instance, a domain, an area
-        or a prefix.</t>
+        <t>The 64-Bit 'Identifier' field is used to associate the NLRI to a routing
+        instance and domain. (FIXME: s/routing instance/IGP instance/??)</t>
 
-        <t>Each Node Descriptor and Link Descriptor consists of one or more
-        TLVs described in the following sections. The sender of an UPDATE
-        message MUST order the TLVs within a Node Descriptor or a Link
-        Descriptor in ascending order of TLV type.</t>
+        <t>Each Node Descriptor and Link Descriptor consists of one or more TLVs
+        described in the following sections. The sender of an UPDATE message
+        MUST order the TLVs within a Node Descriptor or a Link Descriptor in
+        ascending order of TLV type.</t>
 
         <section anchor="IDENTIFIERS" title="Identifier TLV">
-          <t>Identifier TLV (Type 256) is a mandatory TLV that appear in Node,
-          Link and Prefix NLRIs. Identifier TLV carries all identifiers
-          associated with the NLRI in a SubTLV format. Possible Sub TLVs are
-          Instance Identifier, Domain Identifier, Area Identifier, OSPF Route
-          Type and Multi-Topology ID.</t>
-
-          <figure anchor="IDENTIFIERTLV" title="Identifier TLV Format">
-            <artwork>
-   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |              Type             |             Length            |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                 Identifier Sub-TLVs (variable)                |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-  Where:
-
-    Type: 256
-    Length: variable
-    Identifier Sub-TLVs: Identifiers
-  </artwork>
-          </figure>
-
-          <t>An Identifier may be used to distinguish a Node, a Link or a
-          Prefix with different types of identifiers. Therefore different
-          SubTLVs are defined here below in order to address the different
-          requirements.</t>
-
-          <section anchor="INSTANCEID" title="Instance Identifier SubTLV">
-            <t>Instance Identifier is a mandatory SubTLV that MUST be present
-            in all NLRIs. It is used to identify the topology instance the
-            content of the NLRI and attributes refers to.</t>
-
-            <figure anchor="INSTANCEIDTLV"
-                    title="Instance Identifier Sub-TLV Format">
-              <artwork>   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |              Type             |             Length            |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                 Instance Identifier (variable)                |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-  Where:
-
-    Type: 1
-    Length: variable 
-</artwork>
-            </figure>
-          </section>
-
-          <section anchor="DOMAINID" title="Domain Identifier SubTLV">
-            <t>Domain Identifier is an optional SubTLV that MAY be present in
-            all NLRIs. It is used to identify the domain (or sub-domain) to
-            which the NLRI belongs.</t>
-
-            <figure anchor="DOMAINIDTLV"
-                    title="Domain Identifier Sub-TLV Format">
-              <artwork>   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |              Type             |             Length            |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                 Domain Identifier (variable)                  |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-  Where:
-
-    Type: 2
-    Length: variable 
-  </artwork>
-            </figure>
-          </section>
-
-          <section anchor="AREAID" title="Area Identifier SubTLV">
-            <t>Area Identifier is an optional SubTLV that MAY be present in
-            all NLRIs. It is used to identify the area to which the NLRI
-            belongs. Example: an OSPF ABR router advertises itself multiple
-            time (one for each area it participates into). Area Identifier
-            allows the different NLRIs of the same router to be
-            discriminated.</t>
-
-            <figure anchor="AREAIDTLV" title="Area Identifier Sub-TLV Format">
-              <artwork>   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |              Type             |             Length            |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                 Area Identifier (variable)                    |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-  Where:
-
-    Type: 3
-    Length:variable 
-  </artwork>
-            </figure>
-          </section>
 
           <section anchor="ROUTETYPEID" title="OSPF Route Type SubTLV">
+            <t>FIXME: Becomes a Prefix Descriptor</t>
+
             <t>Route Type is an optional SubTLV that MAY be present in the
             Prefix NLRIs. It is used to identify the OSPF route-type of the
             prefix. It is used when an OSPF prefix is advertised in the OSPF
             domain with multiple different route-types. The Route Type
-            Identifier allows to discriminate these advertisements.</t>
+            Identifier allows to discriminate these advertisements. OSPF
+            protocol defines the following OSPF Route Types:
+            <list style="hanging">
+              <t>Intra-Area (0x1)</t>
+              <t>Inter-Area (0x2)</t>
+              <t>External 1 (0x3)</t>
+              <t>External 2 (0x4)</t>
+              <t>NSSA 1 (0x5)</t>
+              <t>NSSA 2 (0x6)</t>
+            </list></t>
+
+            <t>The following is the format of the OSPF Router Type SubTLV.</t>
 
             <figure anchor="ROUTETYPETLV"
                     title="OSPF Route Type Sub-TLV Format">
@@ -661,37 +546,8 @@ Where:
     Length: 1 
   </artwork>
             </figure>
-
-            <t>OSPF Route Type can be either: Intra-Area (0x1), Inter-Area
-            (0x2), External 1 (0x3), External 2 (0x4), NSSA (0x5) and is
-            encoded in a 3 bits number. For prefixes learned from IS-IS, this
-            field MUST to be set to 0x0 on transmission.</t>
           </section>
 
-          <section anchor="MTIDTLV" title="Multi Topology ID SubTLV">
-            <t>The Multi Topology ID SubTLV (type: 5) carries the Multi
-            Topology ID for the link, node or prefix. The semantics of the
-            Multi Topology ID are defined in <xref target="RFC5120">RFC5120,
-            Section 7.2</xref>, and the OSPF Multi Topology ID), defined in
-            <xref target="RFC4915">RFC4915, Section 3.7</xref>. If the value
-            in the Multi Topology ID TLV is derived from OSPF, then the upper
-            9 bits of the Multi Topology ID are set to 0.</t>
-
-            <figure anchor="MTID" title="Multi Topology ID SubTLV format">
-              <artwork>
-   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |              Type             |             Length            | 
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |R R R R|   Multi Topology ID   | 
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-              </artwork>
-            </figure>
-
-            <t>The Multi Topology Identifier SubTLV is present in any NLRI
-            Type.</t>
-          </section>
         </section>
 
         <section title="Node Descriptors">
@@ -774,34 +630,33 @@ Where:
               <ttcol align="right">Length</ttcol>
 
               <c>259</c>
-
               <c>Autonomous System</c>
-
               <c>4</c>
 
               <c>260</c>
-
               <c>BGP Identifier</c>
-
-              <c>4</c>
+              <c>8</c>
 
               <c>261</c>
-
               <c>ISO Node-ID</c>
-
               <c>7</c>
 
               <c>262</c>
-
               <c>IPv4 Router-ID</c>
-
-              <c>variable</c>
+              <c>4,8</c>
 
               <c>263</c>
-
               <c>IPv6 Router-ID</c>
+              <c>16,32</c>
 
-              <c>16</c>
+              <c>264 XXX renumber</c>
+              <c>Area-ID</c>
+              <c>4</c>
+
+              <c>265 XXX renumber</c>
+              <c>Multi-Topology-ID</c>
+              <c>4</c>
+
             </texttable>
 
             <t>The TLV values in Node Descriptor Sub-TLVs are defined as
@@ -814,6 +669,11 @@ Where:
                 <t hangText="BGP-Identifier:">opaque value (32 Bit AS ID);
                 uniquely identifying the BGP-LS speaker within an AS.</t>
 
+                <t hangText="ISO Node ID:">ISO node-ID (6 octets ISO
+                system-ID) followed by a PSN octet in case LAN "Pseudonode"
+                information gets advertised. The PSN octet must be zero for
+                non-LAN "Pseudonodes".</t>
+
                 <t hangText="IPv4 Router ID:">opaque value (can be an IPv4
                 address or an 32 Bit router ID). When encoding an OSPF
                 Designated Router ID, the length is 8 (first 4 bytes is the
@@ -822,12 +682,42 @@ Where:
                 4.</t>
 
                 <t hangText="IPv6 Router ID:">opaque value (can be an IPv6
-                address or 128 Bit router ID).</t>
+                address or an 128 Bit router ID). When encoding an OSPF
+                Designated Router ID, the length is 32 (first 16 bytes is the
+                Router-ID originating the Type-2 LSA and next 16 bytes are
+                taken from the Type-2 LSA ID). In other cases, the length is
+                16.</t>
 
-                <t hangText="ISO Node ID:">ISO node-ID (6 octets ISO
-                system-ID) followed by a PSN octet in case LAN "Pseudonode"
-                information gets advertised. The PSN octet must be zero for
-                non-LAN "Pseudonodes".</t>
+                <t hangText="Area ID:">It is used to identify the 32 Bit
+		area to which the NLRI belongs. Area Identifier allows
+		the different NLRIs of the same router to be discriminated.
+		</t>
+		
+		<t hangText="MT-ID:">
+		  The Multi Topology ID TLV (type: XXX renumber) carries the
+		  Multi Topology ID for the link, node or prefix. The semantics of the
+		  Multi Topology ID are defined in <xref target="RFC5120">RFC5120,
+		  Section 7.2</xref>, and the OSPF Multi Topology ID), defined in <xref
+		  target="RFC4915">RFC4915, Section 3.7</xref>. If the value in the
+		  Multi Topology ID TLV is derived from OSPF, then the upper 9 bits of
+		  the Multi Topology ID are set to 0.
+
+            <figure anchor="MTIDTLV" title="Multi Topology ID TLV format">
+              <artwork>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |              Type             |             Length            | 
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |R R R R|   Multi Topology ID   | 
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+              </artwork>
+            </figure>
+
+            The Multi Topology Identifier SubTLV MAY be present in any
+	    NLRI Type.
+		</t>
+
 
                 <t>There can be at most one instance of each TLV type present
                 in any Node Descriptor. The TLV ordering within a Node
@@ -1237,14 +1127,6 @@ Level-1     level-1-2       level-1
 
             <ttcol align="left">Defined in:</ttcol>
 
-            <c>256/3</c>
-
-            <c>Area Identifier</c>
-
-            <c>---</c>
-
-            <c><xref target="AREAID"></xref></c>
-
             <c>269</c>
 
             <c>Administrative group (color)</c>
@@ -1487,14 +1369,32 @@ Level-1     level-1-2       level-1
             </figure>
           </section>
 
-          <section anchor="ISISAREAADDR"
-                   title="IS-IS Area Address attribute TLV">
+          <section anchor="ISISAREA"
+                   title="IS-IS Area TLV">
             <t>The area address is carried in the Area Identifier SubTLV of
             the Identifier TLV and consists of the Area Address which is
             assigned to the link. If more than one Area Addresses are present,
             only the lower address is encoded. Note that the Area Identifier
-            SubTLV may appear in all NLRI types (Link, Node and Prefix) and is
-            defined in <xref target="AREAID"></xref>.</t>
+            TLV may appear in all NLRI types (Link, Node and Prefix).
+            </t>
+
+            <figure anchor="ISISAREAIDTLV" title="IS-IS Area Identifier TLV Format">
+              <artwork>   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |              Type             |             Length            |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                 Area Identifier (variable)                    |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+  Where:
+
+    Type: XXX renumber
+    Length:variable 
+  </artwork>
+            </figure>
+
+
           </section>
         </section>
 
@@ -1661,14 +1561,6 @@ Level-1     level-1-2       level-1
             </figure>
           </section>
 
-          <section anchor="ISISNODEAREA" title="ISIS Area Address TLV">
-            <t>The area address is carried in the Area Identifier SubTLV of
-            the Identifier TLV and consists of the Area Address which is
-            assigned to the node. If more than one Area Addresses are present,
-            only the lower address is encoded. Note that the Area Identifier
-            SubTLV may appear in all NLRI types (Link, Node and Prefix) and is
-            defined in <xref target="AREAID"></xref>.</t>
-          </section>
         </section>
 
         <section title="Prefix Attributes TLVs">
