@@ -470,7 +470,7 @@
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                 Prefix Descriptors (variable)                 |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |  Reachability information (variable; one or more prefixes)    |
+  |  IP Reachability Information (variable; one or more prefixes) |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
         </figure>
@@ -508,47 +508,6 @@
         MUST order the TLVs within a Node Descriptor or a Link Descriptor in
         ascending order of TLV type.</t>
 
-        <section anchor="IDENTIFIERS" title="Identifier TLV">
-
-          <section anchor="ROUTETYPEID" title="OSPF Route Type SubTLV">
-            <t>FIXME: Becomes a Prefix Descriptor</t>
-
-            <t>Route Type is an optional SubTLV that MAY be present in the
-            Prefix NLRIs. It is used to identify the OSPF route-type of the
-            prefix. It is used when an OSPF prefix is advertised in the OSPF
-            domain with multiple different route-types. The Route Type
-            Identifier allows to discriminate these advertisements. OSPF
-            protocol defines the following OSPF Route Types:
-            <list style="hanging">
-              <t>Intra-Area (0x1)</t>
-              <t>Inter-Area (0x2)</t>
-              <t>External 1 (0x3)</t>
-              <t>External 2 (0x4)</t>
-              <t>NSSA 1 (0x5)</t>
-              <t>NSSA 2 (0x6)</t>
-            </list></t>
-
-            <t>The following is the format of the OSPF Router Type SubTLV.</t>
-
-            <figure anchor="ROUTETYPETLV"
-                    title="OSPF Route Type Sub-TLV Format">
-              <artwork>   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |              Type             |             Length            |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |  Route Type   |
-  +-+-+-+-+-+-+-+-+
-  
-Where:
-
-    Type: 4
-    Length: 1 
-  </artwork>
-            </figure>
-          </section>
-
-        </section>
 
         <section title="Node Descriptors">
           <t>Each link gets anchored by at least a pair of router-IDs. Since
@@ -623,37 +582,35 @@ Where:
 
             <texttable anchor="table_local_anchor_node_tlv"
                        title="Node Descriptor Sub-TLVs">
-              <ttcol align="center">TLV/SubTLV</ttcol>
-
+              <ttcol align="center">SubTLV Code Point</ttcol>
               <ttcol align="left">Description</ttcol>
-
               <ttcol align="right">Length</ttcol>
 
-              <c>259</c>
+              <c>512</c>
               <c>Autonomous System</c>
               <c>4</c>
 
-              <c>260</c>
+              <c>513</c>
               <c>BGP Identifier</c>
               <c>8</c>
 
-              <c>261</c>
+              <c>514</c>
               <c>ISO Node-ID</c>
               <c>7</c>
 
-              <c>262</c>
+              <c>515</c>
               <c>IPv4 Router-ID</c>
               <c>4,8</c>
 
-              <c>263</c>
+              <c>516</c>
               <c>IPv6 Router-ID</c>
               <c>16,32</c>
 
-              <c>264 XXX renumber</c>
+              <c>517</c>
               <c>Area-ID</c>
               <c>4</c>
 
-              <c>265 XXX renumber</c>
+              <c>518</c>
               <c>Multi-Topology-ID</c>
               <c>4</c>
 
@@ -663,47 +620,45 @@ Where:
             follows:</t>
 
             <t><list style="hanging">
-                <t hangText="Autonomous System:">opaque value (32 Bit AS
-                Number)</t>
+              <t hangText="Autonomous System:">opaque value (32 Bit AS
+              Number)</t>
 
-                <t hangText="BGP-Identifier:">opaque value (32 Bit AS ID);
-                uniquely identifying the BGP-LS speaker within an AS.</t>
+              <t hangText="BGP-Identifier:">opaque value (32 Bit AS ID);
+              uniquely identifying the BGP-LS speaker within an AS.</t>
 
-                <t hangText="ISO Node ID:">ISO node-ID (6 octets ISO
-                system-ID) followed by a PSN octet in case LAN "Pseudonode"
-                information gets advertised. The PSN octet must be zero for
-                non-LAN "Pseudonodes".</t>
+              <t hangText="ISO Node ID:">ISO node-ID (6 octets ISO system-ID)
+              followed by a PSN octet in case LAN "Pseudonode" information gets
+              advertised. The PSN octet must be zero for non-LAN
+              "Pseudonodes".</t>
 
-                <t hangText="IPv4 Router ID:">opaque value (can be an IPv4
-                address or an 32 Bit router ID). When encoding an OSPF
-                Designated Router ID, the length is 8 (first 4 bytes is the
-                Router-ID originating the Type-2 LSA and next 4 bytes are
-                taken from the Type-2 LSA ID). In other cases, the length is
-                4.</t>
+              <t hangText="IPv4 Router ID:">opaque value (can be an IPv4 address
+              or an 32 Bit router ID). When encoding an OSPF Designated Router
+              ID, the length is 8 (first 4 bytes is the Router-ID originating
+              the Type-2 LSA and next 4 bytes are taken from the Type-2 LSA
+              ID). In other cases, the length is 4.</t>
 
-                <t hangText="IPv6 Router ID:">opaque value (can be an IPv6
-                address or an 128 Bit router ID). When encoding an OSPF
-                Designated Router ID, the length is 32 (first 16 bytes is the
-                Router-ID originating the Type-2 LSA and next 16 bytes are
-                taken from the Type-2 LSA ID). In other cases, the length is
-                16.</t>
+              <t hangText="IPv6 Router ID:">opaque value (can be an IPv6 address
+              or an 128 Bit router ID). When encoding an OSPF Designated Router
+              ID, the length is 32 (first 16 bytes is the Router-ID originating
+              the Type-2 LSA and next 16 bytes are taken from the Type-2 LSA
+              ID). In other cases, the length is 16.</t>
 
-                <t hangText="Area ID:">It is used to identify the 32 Bit
-		area to which the NLRI belongs. Area Identifier allows
-		the different NLRIs of the same router to be discriminated.
-		</t>
+              <t hangText="Area ID:">It is used to identify the 32 Bit area to
+              which the NLRI belongs. Area Identifier allows the different NLRIs
+              of the same router to be discriminated.
+              </t>
 		
-		<t hangText="MT-ID:">
-		  The Multi Topology ID TLV (type: XXX renumber) carries the
-		  Multi Topology ID for the link, node or prefix. The semantics of the
-		  Multi Topology ID are defined in <xref target="RFC5120">RFC5120,
-		  Section 7.2</xref>, and the OSPF Multi Topology ID), defined in <xref
-		  target="RFC4915">RFC4915, Section 3.7</xref>. If the value in the
-		  Multi Topology ID TLV is derived from OSPF, then the upper 9 bits of
-		  the Multi Topology ID are set to 0.
+              <t hangText="MT-ID:">
+                The Multi Topology ID TLV (type: XXX renumber) carries the Multi
+                Topology ID for the link, node or prefix. The semantics of the
+                Multi Topology ID are defined in <xref target="RFC5120">RFC5120,
+                Section 7.2</xref>, and the OSPF Multi Topology ID), defined in
+                <xref target="RFC4915">RFC4915, Section 3.7</xref>. If the value
+                in the Multi Topology ID TLV is derived from OSPF, then the
+                upper 9 bits of the Multi Topology ID are set to 0.
 
-            <figure anchor="MTIDTLV" title="Multi Topology ID TLV format">
-              <artwork>
+                <figure anchor="MTIDTLV" title="Multi Topology ID TLV format">
+                  <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -712,24 +667,23 @@ Where:
   |R R R R|   Multi Topology ID   | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
               </artwork>
-            </figure>
+                </figure>
 
-            The Multi Topology Identifier SubTLV MAY be present in any
-	    NLRI Type.
-		</t>
+                The Multi Topology Identifier SubTLV MAY be present in any NLRI
+                Type.
+              </t>
 
-
-                <t>There can be at most one instance of each TLV type present
-                in any Node Descriptor. The TLV ordering within a Node
-                descriptor MUST be kept in order of increasing numeric value
-                of type. TLVs 259 and 260 specify administrative context in
-                which TLVs 261-263 are to be evaluated. The first TLV from
-                range 261-263 is to be interpreted as the primary node
-                identifier by which the node can be referenced within its
-                administrative contexts. Any further TLVs are to be treated as
-                secondary identifiers, which may be used for cross-reference,
-                but are to be treated as if they are object attributes.</t>
-              </list></t>
+              <t>There can be at most one instance of each TLV type present in
+              any Node Descriptor. The TLV ordering within a Node descriptor
+              MUST be kept in order of increasing numeric value of type. TLVs
+              259 and 260 specify administrative context in which TLVs 261-263
+              are to be evaluated. The first TLV from range 261-263 is to be
+              interpreted as the primary node identifier by which the node can
+              be referenced within its administrative contexts. Any further TLVs
+              are to be treated as secondary identifiers, which may be used for
+              cross-reference, but are to be treated as if they are object
+              attributes.</t>
+            </list></t>
           </section>
 
           <section anchor="gbl_uniqueness"
@@ -986,65 +940,39 @@ Level-1     level-1-2       level-1
 
           <texttable anchor="table_link_descriptor_tlv"
                      title="Link Descriptor TLVs">
-            <ttcol align="center">TLV/SubTLV</ttcol>
-
+            <ttcol align="center">TLV Code Point</ttcol>
             <ttcol align="left">Description</ttcol>
-
             <ttcol align="center">IS-IS TLV/Sub-TLV</ttcol>
-
             <ttcol align="left">Value defined in:</ttcol>
 
-            <c>264</c>
-
+            <c>258</c>
             <c>Link Local/Remote Identifiers</c>
-
             <c>22/4</c>
-
             <c><xref target="RFC5307"></xref>/1.1</c>
 
-            <c>265</c>
-
+            <c>259</c>
             <c>IPv4 interface address</c>
-
             <c>22/6</c>
-
             <c><xref target="RFC5305"></xref>/3.2</c>
 
-            <c>266</c>
-
+            <c>260</c>
             <c>IPv4 neighbor address</c>
-
             <c>22/8</c>
-
             <c><xref target="RFC5305"></xref>/3.3</c>
 
-            <c>267</c>
-
+            <c>261</c>
             <c>IPv6 interface address</c>
-
             <c>22/12</c>
-
             <c><xref target="RFC6119"></xref>/4.2</c>
 
-            <c>268</c>
-
+            <c>262</c>
             <c>IPv6 neighbor address</c>
-
             <c>22/13</c>
-
             <c><xref target="RFC6119"></xref>/4.3</c>
-
-            <c>256/5</c>
-
-            <c>Multi Topology ID</c>
-
-            <c>---</c>
-
-            <c><xref target="MTIDTLV"></xref></c>
           </texttable>
         </section>
 
-        <section title="Prefix Descriptors">
+        <section anchor="PREFIXDESC" title="Prefix Descriptors">
           <t>The 'Prefix descriptor' TLVs uniquely identify a Prefix (IPv4 or
           IPv6) originated by a Node.</t>
 
@@ -1053,46 +981,62 @@ Level-1     level-1-2       level-1
 
           <texttable anchor="table_prefix_descriptor_tlv"
                      title="Prefix Descriptor TLVs">
-            <ttcol align="center">TLV/SubTLV</ttcol>
-
+            <ttcol align="center">TLV Code Point</ttcol>
             <ttcol align="left">Description</ttcol>
+            <ttcol align="center">Length</ttcol>
 
-            <ttcol align="center">IS-IS TLV/Sub-TLV</ttcol>
-
-            <ttcol align="left">Value defined in:</ttcol>
-
-            <c>256/5</c>
-
-            <c>Multi Topology ID</c>
-
-            <c>---</c>
-
-            <c><xref target="MTIDTLV"></xref></c>
+            <c>264</c>
+            <c>OSPF Route Type</c>
+            <c>1</c>
           </texttable>
 
-          <section title="The Prefix NLRI">
-            <t>The Prefix NLRI is a variable length field that contains one or
-            more IP address prefixes (IPv4 or IPv6) originally advertised in
-            the IGP topology. The NLRI Type determines the address-family.
-            Reachability information is encoded as one or more 2-tuples of the
-            form &lt;length, prefix&gt;, whose fields are described below:</t>
+            <t>The TLV values in Node Descriptor Sub-TLVs are defined as
+            follows:</t>
 
-            <figure anchor="PREFIXNLRI" title="Prefix NLRI format">
-              <artwork>
+            <t>
+              <list style="hanging">
+                <t hangText="OSPF Route Type:">is an optional SubTLV that MAY be
+                present in the Prefix NLRIs. It is used to identify the OSPF
+                route-type of the prefix. It is used when an OSPF prefix is
+                advertised in the OSPF domain with multiple different
+                route-types. The Route Type Identifier allows to discriminate
+                these advertisements. OSPF protocol defines the following OSPF
+                Route Types:
+                
+                <list style="hanging">
+                  <t>Intra-Area (0x1)</t>
+                  <t>Inter-Area (0x2)</t>
+                  <t>External 1 (0x3)</t>
+                  <t>External 2 (0x4)</t>
+                  <t>NSSA 1 (0x5)</t>
+                  <t>NSSA 2 (0x6)</t>
+                </list></t>
+              </list>
+            </t>
+        </section>
+
+        <section title="IP Reachability Information">
+          <t>The Prefix NLRI is a variable length field that contains one or
+          more IP address prefixes (IPv4 or IPv6) originally advertised in
+          the IGP topology. The NLRI Type determines the address-family.
+          Reachability information is encoded as one or more 2-tuples of the
+          form &lt;length, prefix&gt;, whose fields are described below:</t>
+
+          <figure anchor="PREFIXNLRI" title="Prefix NLRI format">
+            <artwork>
                   +---------------------------+
                   |   Length (1 octet)        |
                   +---------------------------+
                   |   Prefix (variable)       |
                   +---------------------------+
-</artwork>
-            </figure>
+            </artwork>
+          </figure>
 
-            <t>The 'Length' field contains the length of the prefix in bits.
-            Only the most significant octets of the prefix are encoded. I.e. 1
-            octet for prefix length 1 up to 8, 2 octets for prefix length 9 to
-            16, 3 octets for prefix length 17 up to 24 and 4 octets for prefix
-            length 25 up to 32, etc.</t>
-          </section>
+          <t>The 'Length' field contains the length of the prefix in bits.
+          Only the most significant octets of the prefix are encoded. I.e. 1
+          octet for prefix length 1 up to 8, 2 octets for prefix length 9 to
+          16, 3 octets for prefix length 17 up to 24 and 4 octets for prefix
+          length 25 up to 32, etc.</t>
         </section>
       </section>
 
@@ -1102,6 +1046,132 @@ Level-1     level-1-2       level-1
         as a set of Type/Length/Value (TLV) triplets, described in the
         following section. This attribute SHOULD only be included with Link
         State NLRIs. This attribute MUST be ignored for all other NLRIs.</t>
+
+        <section title="Node Attribute TLVs">
+          <t>The following node attribute TLVs are defined:</t>
+
+          <texttable anchor="node-attribute_tlv" title="Node Attribute TLVs">
+            <ttcol align="center">TLV Code Point</ttcol>
+            <ttcol align="left">Description</ttcol>
+            <ttcol align="right">Length</ttcol>
+
+            <c>1024</c>
+            <c>Node Flag Bits</c>
+            <c>1</c>
+
+            <c>1025</c>
+            <c>OSPF Specific Node Properties</c>
+            <c>variable</c>
+
+            <c>1026</c>
+            <c>IS-IS Specific Node Properties</c>
+            <c>variable</c>
+
+            <c>1027</c>
+            <c>IS-IS Area Address/Domain Identifier</c>
+            <c>variable</c>
+          </texttable>
+
+          <section anchor="NODEFLAGBITS" title="Node Flag Bits TLV">
+            <t>The Node Flag Bits TLV carries a bit mask describing node
+            attributes. The value is a variable length bit array of flags, where
+            each bit represents a node capability.</t>
+
+            <figure anchor="node_flag_bits" title="Node Flag Bits TLV format">
+              <artwork>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |              Type             |             Length            | 
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                           Flags  (variable)                   |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  </artwork>
+            </figure>
+
+            <t>The bits are defined as follows:</t>
+
+            <texttable anchor="table_node_flag_bits_tlv"
+                       title="Node Flag Bits Definitions">
+              <ttcol align="center">Bit</ttcol>
+              <ttcol align="left">Description</ttcol>
+              <ttcol align="left">Reference</ttcol>
+
+              <c>0</c>
+              <c>Overload Bit</c>
+              <c><xref target="RFC1195"></xref></c>
+
+              <c>1</c>
+              <c>Attached Bit</c>
+              <c><xref target="RFC1195"></xref></c>
+
+              <c>2</c>
+              <c>External Bit</c>
+              <c><xref target="RFC2328"></xref></c>
+
+              <c>3</c>
+              <c>ABR Bit</c>
+              <c><xref target="RFC2328"></xref></c>
+            </texttable>
+          </section>
+
+          <section anchor="OSPFSPECIFICNODE"
+                   title="OSPF Specific Node Properties TLV">
+            <t>The OSPF Specific Node Properties TLV is an envelope that
+            transparently carries optional node properties TLVs advertised by an
+            OSPF router. The value field contains one or more optional OSPF node
+            property TLVs, such as the OSPF Router Informational Capabilities
+            TLV defined in <xref target="RFC4970"></xref>, or the OSPF TE Node
+            Capability Descriptor TLV described in <xref
+            target="RFC5073"></xref>. An originating router shall use this TLV
+            for encoding information specific to the OSPF protocol or new OSPF
+            extensions for which there is no protocol neutral representation in
+            the BGP link-state NLRI.</t>
+
+            <figure anchor="optional_ospf_node-property_tlv"
+                    title="OSPF specific Node property format">
+              <artwork>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |              Type             |             Length            | 
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                                                               |
+  |            OSPF specific node properties (variable)           |
+  |                                                               |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  </artwork>
+            </figure>
+          </section>
+
+          <section anchor="ISISSPECIFICNODE"
+                   title="IS-IS Specific Node Properties TLV">
+            <t>The IS-IS Router Specific Node Properties TLV is an envelope that
+            transparently carries optional node specific TLVs advertised by an
+            IS-IS router. The value field contains one or more optional IS-IS
+            node property TLVs, such as the IS-IS TE Node Capability Descriptor
+            TLV described in <xref target="RFC5073"></xref>. An originating
+            router shall use this TLV for encoding information specific to the
+            IS-IS protocol or new IS-IS extensions for which there is no
+            protocol neutral representation in the BGP link-state NLRI.</t>
+
+            <figure anchor="optional_isis_node_property_tlv"
+                    title="IS-IS specific Node property format">
+              <artwork>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |              Type             |             Length            | 
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                                                               |
+  |           IS-IS specific node properties (variable)           |
+  |                                                               |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  </artwork>
+            </figure>
+          </section>
+
+        </section>
 
         <section title="Link Attribute TLVs">
           <t>Each 'Link Attribute' is a Type/Length/Value (TLV) triplet
@@ -1119,108 +1189,72 @@ Level-1     level-1-2       level-1
 
           <texttable anchor="table_link_attribute_tlv"
                      title="Link Attribute TLVs">
-            <ttcol align="center">TLV/SubTLV</ttcol>
-
+            <ttcol align="center">TLV Code Point</ttcol>
             <ttcol align="left">Description</ttcol>
-
             <ttcol align="center">IS-IS TLV/Sub-TLV</ttcol>
-
             <ttcol align="left">Defined in:</ttcol>
 
-            <c>269</c>
-
+            <c>1088</c>
             <c>Administrative group (color)</c>
-
             <c>22/3</c>
-
             <c><xref target="RFC5305"></xref>/3.1</c>
 
-            <c>270</c>
-
+            <c>1089</c>
             <c>Maximum link bandwidth</c>
-
             <c>22/9</c>
-
             <c><xref target="RFC5305"></xref>/3.3</c>
 
-            <c>271</c>
-
+            <c>1090</c>
             <c>Max. reservable link bandwidth</c>
-
             <c>22/10</c>
-
             <c><xref target="RFC5305"></xref>/3.5</c>
 
-            <c>272</c>
-
+            <c>1091</c>
             <c>Unreserved bandwidth</c>
-
             <c>22/11</c>
-
             <c><xref target="RFC5305"></xref>/3.6</c>
 
-            <c>273</c>
-
+            <c>1092</c>
             <c>TE Default Metric</c>
-
             <c>22/18</c>
-
             <c><xref target="RFC5305"></xref>/3.7</c>
 
-            <c>274</c>
-
+            <c>1093</c>
             <c>Link Protection Type</c>
-
             <c>22/20</c>
-
             <c><xref target="RFC5307"></xref>/1.2</c>
 
-            <c>275</c>
-
+            <c>1094</c>
             <c>MPLS Protocol Mask</c>
-
             <c>---</c>
-
             <c><xref target="MPLSPROTOTLV"></xref></c>
 
-            <c>276</c>
-
+            <c>1095</c>
             <c>Metric</c>
-
             <c>---</c>
-
             <c><xref target="METTLV"></xref></c>
 
-            <c>277</c>
-
+            <c>1096</c>
             <c>Shared Risk Link Group</c>
-
             <c>---</c>
-
             <c><xref target="SRLGTLV"></xref></c>
 
-            <c>278</c>
-
+            <c>1097</c>
             <c>OSPF specific link attribute</c>
-
             <c>---</c>
-
             <c><xref target="OSPFLINKSPECIFIC"></xref></c>
 
-            <c>279</c>
-
+            <c>1098</c>
             <c>IS-IS Specific Link Attribute</c>
-
             <c>---</c>
-
             <c><xref target="ISISLINKSPECIFIC"></xref></c>
           </texttable>
 
           <section anchor="MPLSPROTOTLV" title="MPLS Protocol Mask TLV">
-            <t>The MPLS Protocol TLV (Type 275) carries a bit mask describing
-            which MPLS signaling protocols are enabled. The length of this TLV
-            is 1. The value is a bit array of 8 flags, where each bit
-            represents an MPLS Protocol capability.</t>
+            <t>The MPLS Protocol TLV carries a bit mask describing which MPLS
+            signaling protocols are enabled. The length of this TLV is 1. The
+            value is a bit array of 8 flags, where each bit represents an MPLS
+            Protocol capability.</t>
 
             <figure anchor="MPLSPROTO" title="MPLS Protocol TLV">
               <artwork>
@@ -1239,37 +1273,29 @@ Level-1     level-1-2       level-1
             <texttable anchor="table_mpls_protocols_tlv"
                        title="MPLS Protocol Mask TLV Codes">
               <ttcol align="center">Bit</ttcol>
-
               <ttcol align="left">Description</ttcol>
-
               <ttcol align="left">Reference</ttcol>
 
               <c>0</c>
-
               <c>Label Distribution Protocol (LDP)</c>
-
               <c><xref target="RFC5036"></xref></c>
 
               <c>1</c>
-
               <c>Extension to RSVP for LSP Tunnels (RSVP-TE)</c>
-
               <c><xref target="RFC3209"></xref></c>
 
               <c>2-7</c>
-
               <c>Reserved for future use</c>
-
               <c></c>
             </texttable>
           </section>
 
           <section anchor="METTLV" title="Metric TLV">
-            <t>The IGP Metric TLV (Type 276) carries the metric for this link.
-            The length of this TLV is 3. If the length of the metric from
-            which the IGP Metric value is derived is less than 3 (e.g. for
-            OSPF link metrics or non-wide IS-IS metric), then the upper bits
-            of the TLV are set to 0.</t>
+            <t>The IGP Metric TLV carries the metric for this link. The length
+            of this TLV is 3. If the length of the metric from which the IGP
+            Metric value is derived is less than 3 (e.g. for OSPF link metrics
+            or non-wide IS-IS metric), then the upper bits of the TLV are set to
+            0.</t>
 
             <figure anchor="MET" title="Metric TLV format">
               <artwork>
@@ -1285,13 +1311,13 @@ Level-1     level-1-2       level-1
           </section>
 
           <section anchor="SRLGTLV" title="Shared Risk Link Group TLV">
-            <t>The Shared Risk Link Group (SRLG) TLV (Type 277) carries the
-            Shared Risk Link Group information (see Section 2.3, "Shared Risk
-            Link Group Information", of <xref target="RFC4202"></xref>). It
-            contains a data structure consisting of a (variable) list of SRLG
-            values, where each element in the list has 4 octets, as shown in
-            <xref target="SRLG"></xref>. The length of this TLV is 4 * (number
-            of SRLG values).</t>
+            <t>The Shared Risk Link Group (SRLG) TLV carries the Shared Risk
+            Link Group information (see Section 2.3, "Shared Risk Link Group
+            Information", of <xref target="RFC4202"></xref>). It contains a data
+            structure consisting of a (variable) list of SRLG values, where each
+            element in the list has 4 octets, as shown in <xref
+            target="SRLG"></xref>. The length of this TLV is 4 * (number of SRLG
+            values).</t>
 
             <figure anchor="SRLG" title="Shared Risk Link Group TLV format">
               <artwork>
@@ -1319,13 +1345,13 @@ Level-1     level-1-2       level-1
 
           <section anchor="OSPFLINKSPECIFIC"
                    title="OSPF Specific Link Attribute TLV">
-            <t>The OSPF specific link attribute TLV (Type 278) is an envelope
-            that transparently carries optional link properties TLVs
-            advertised by an OSPF router. The value field contains one or more
-            optional OSPF link attribute TLVs. An originating router shall use
-            this TLV for encoding information specific to the OSPF protocol or
-            new OSPF extensions for which there is no protocol neutral
-            representation in the BGP link-state NLRI.</t>
+            <t>The OSPF specific link attribute TLV is an envelope that
+            transparently carries optional link properties TLVs advertised by an
+            OSPF router. The value field contains one or more optional OSPF link
+            attribute TLVs. An originating router shall use this TLV for
+            encoding information specific to the OSPF protocol or new OSPF
+            extensions for which there is no protocol neutral representation in
+            the BGP link-state NLRI.</t>
 
             <figure anchor="OSPFLINKSPECIFICTLV"
                     title="OSPF specific link attribute format">
@@ -1345,13 +1371,13 @@ Level-1     level-1-2       level-1
 
           <section anchor="ISISLINKSPECIFIC"
                    title="IS-IS specific link attribute TLV">
-            <t>The IS-IS specific link attribute TLV (Type 279) is an envelope
-            that transparently carries optional link properties TLVs
-            advertised by an IS-IS router. The value field contains one or
-            more optional IS-IS link attribute TLVs. An originating router
-            shall use this TLV for encoding information specific to the IS-IS
-            protocol or new IS-IS extensions for which there is no protocol
-            neutral representation in the BGP link-state NLRI.</t>
+            <t>The IS-IS specific link attribute TLV is an envelope that
+            transparently carries optional link properties TLVs advertised by an
+            IS-IS router. The value field contains one or more optional IS-IS
+            link attribute TLVs. An originating router shall use this TLV for
+            encoding information specific to the IS-IS protocol or new IS-IS
+            extensions for which there is no protocol neutral representation in
+            the BGP link-state NLRI.</t>
 
             <figure anchor="ISISLINKSPECIFICTLV"
                     title="IS-IS specific link attribute format">
@@ -1398,172 +1424,7 @@ Level-1     level-1-2       level-1
           </section>
         </section>
 
-        <section title="Node Attribute TLVs">
-          <t>The following node attribute TLVs are defined:</t>
-
-          <texttable anchor="node-attribute_tlv" title="Node Attribute TLVs">
-            <ttcol align="center">TLV/SubTLV</ttcol>
-
-            <ttcol align="left">Description</ttcol>
-
-            <ttcol align="right">Length</ttcol>
-
-            <c>256/5</c>
-
-            <c>Multi Topology</c>
-
-            <c>2</c>
-
-            <c>280</c>
-
-            <c>Node Flag Bits</c>
-
-            <c>1</c>
-
-            <c>281</c>
-
-            <c>OSPF Specific Node Properties</c>
-
-            <c>variable</c>
-
-            <c>282</c>
-
-            <c>IS-IS Specific Node Properties</c>
-
-            <c>variable</c>
-
-            <c>256</c>
-
-            <c>IS-IS Area Address/Domain Identifier</c>
-
-            <c>variable</c>
-          </texttable>
-
-          <section anchor="MTNODETLV" title="Node Multi Topology ID">
-            <t>The Node Multi Topology ID is carried in the Multi Topolofy ID
-            SubTLV (type 5) of Identifier ID TLV TLV (Type 256) and carries
-            the Multi Topology ID and topology specific flags for this node.
-            The format and semantics of the 'value' field in the Multi
-            Topology TLV is defined in <xref target="MTIDTLV"></xref>. If the
-            value in the Multi Topology TLV is derived from OSPF, then the
-            upper 9 bits of the Multi Topology ID and the 'O' and 'A' bits are
-            set to 0.</t>
-          </section>
-
-          <section anchor="NODEFLAGBITS" title="Node Flag Bits TLV">
-            <t>The Node Flag Bits TLV (Type 280) carries a bit mask describing
-            node attributes. The value is a variable length bit array of
-            flags, where each bit represents a node capability.</t>
-
-            <figure anchor="node_flag_bits" title="Node Flag Bits TLV format">
-              <artwork>
-   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |              Type             |             Length            | 
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                           Flags  (variable)                   |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  </artwork>
-            </figure>
-
-            <t>The bits are defined as follows:</t>
-
-            <texttable anchor="table_node_flag_bits_tlv"
-                       title="Node Flag Bits Definitions">
-              <ttcol align="center">Bit</ttcol>
-
-              <ttcol align="left">Description</ttcol>
-
-              <ttcol align="left">Reference</ttcol>
-
-              <c>0</c>
-
-              <c>Overload Bit</c>
-
-              <c><xref target="RFC1195"></xref></c>
-
-              <c>1</c>
-
-              <c>Attached Bit</c>
-
-              <c><xref target="RFC1195"></xref></c>
-
-              <c>2</c>
-
-              <c>External Bit</c>
-
-              <c><xref target="RFC2328"></xref></c>
-
-              <c>3</c>
-
-              <c>ABR Bit</c>
-
-              <c><xref target="RFC2328"></xref></c>
-            </texttable>
-          </section>
-
-          <section anchor="OSPFSPECIFICNODE"
-                   title="OSPF Specific Node Properties TLV">
-            <t>The OSPF Specific Node Properties TLV (Type 281) is an envelope
-            that transparently carries optional node properties TLVs
-            advertised by an OSPF router. The value field contains one or more
-            optional OSPF node property TLVs, such as the OSPF Router
-            Informational Capabilities TLV defined in <xref
-            target="RFC4970"></xref>, or the OSPF TE Node Capability
-            Descriptor TLV described in <xref target="RFC5073"></xref>. An
-            originating router shall use this TLV for encoding information
-            specific to the OSPF protocol or new OSPF extensions for which
-            there is no protocol neutral representation in the BGP link-state
-            NLRI.</t>
-
-            <figure anchor="optional_ospf_node-property_tlv"
-                    title="OSPF specific Node property format">
-              <artwork>
-   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |              Type             |             Length            | 
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                                                               |
-  |            OSPF specific node properties (variable)           |
-  |                                                               |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  </artwork>
-            </figure>
-          </section>
-
-          <section anchor="ISISSPECIFICNODE"
-                   title="IS-IS Specific Node Properties TLV">
-            <t>The IS-IS Router Specific Node Properties TLV (Type 282) is an
-            envelope that transparently carries optional node specific TLVs
-            advertised by an IS-IS router. The value field contains one or
-            more optional IS-IS node property TLVs, such as the IS-IS TE Node
-            Capability Descriptor TLV described in <xref
-            target="RFC5073"></xref>. An originating router shall use this TLV
-            for encoding information specific to the IS-IS protocol or new
-            IS-IS extensions for which there is no protocol neutral
-            representation in the BGP link-state NLRI.</t>
-
-            <figure anchor="optional_isis_node_property_tlv"
-                    title="IS-IS specific Node property format">
-              <artwork>
-   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |              Type             |             Length            | 
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                                                               |
-  |           IS-IS specific node properties (variable)           |
-  |                                                               |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  </artwork>
-            </figure>
-          </section>
-
-        </section>
-
-        <section title="Prefix Attributes TLVs">
+        <section title="Prefix Attribute TLVs">
           <t>Prefixes are learned from the IGP topology (ISIS or OSPF) with a
           set of IGP attributes (such as metric, route tags, etc.) that MUST
           be reflected into the LINK_STATE attribute. This section describes
@@ -1573,50 +1434,34 @@ Level-1     level-1-2       level-1
 
           <texttable anchor="prefix-attribute_tlv"
                      title="Prefix Attribute TLVs">
-            <ttcol align="center">TLV/SubTLV</ttcol>
-
+            <ttcol align="center">TLV Code Point</ttcol>
             <ttcol align="left">Description</ttcol>
-
             <ttcol align="right">Length</ttcol>
-
             <ttcol align="left">Reference</ttcol>
 
-            <c>283</c>
-
+            <c>1152</c>
             <c>IGP Flags</c>
-
             <c>4</c>
+            <c><xref target="IGPFLAGSTLV"></xref></c>
 
-            <c>284</c>
-
+            <c>1153</c>
             <c>Route Tag</c>
-
             <c>4*n</c>
-
             <c><xref target="RFC5130"></xref></c>
 
-            <c>285</c>
-
+            <c>1154</c>
             <c>Extended Tag</c>
-
             <c>8*n</c>
-
             <c><xref target="RFC5130"></xref></c>
 
-            <c>286</c>
-
+            <c>1155</c>
             <c>Prefix Metric</c>
-
             <c>4</c>
-
             <c><xref target="RFC5305"></xref></c>
 
-            <c>287</c>
-
+            <c>1156</c>
             <c>OSPF Forwarding Address</c>
-
             <c>4</c>
-
             <c><xref target="RFC2328"></xref></c>
           </texttable>
 
@@ -1632,44 +1477,30 @@ Level-1     level-1-2       level-1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                            IGP Flags (variable)               | 
+  |                       IGP Flags (variable)                    | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
 
-            <t>where:</t>
-
-            <t>Type is 283</t>
-
-            <t>Length is variable</t>
-
-            <t>The following bits are defined according to the table here
+            <t>The value field contains bits defined according to the table
             below:</t>
 
             <texttable anchor="table_igp_flag_bits_tlv"
                        title="IGP Flag Bits Definitions">
               <ttcol align="center">Bit</ttcol>
-
               <ttcol align="left">Description</ttcol>
-
               <ttcol align="left">Reference</ttcol>
 
               <c>0</c>
-
               <c>ISIS Up/Down Bit</c>
-
               <c><xref target="RFC5305"></xref></c>
 
               <c>1-3</c>
-
               <c>OSPF Route Type</c>
-
               <c><xref target="RFC2328"></xref></c>
 
               <c>4-15</c>
-
               <c>RESERVED</c>
-
               <c></c>
             </texttable>
 
@@ -1690,18 +1521,15 @@ Level-1     level-1-2       level-1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                           Route Tags (one or more)            | 
+  |                     Route Tags (one or more)                  | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
 
-            <t>where:</t>
+            <t>Length is a multiple of 4.</t>
 
-            <t>Type is 284</t>
-
-            <t>Length is a multiple of 4</t>
-
-            <t>One or more Route Tags as learned in the IGP topology.</t>
+            <t>The value field contains one or more Route Tags as learned in the
+            IGP topology.</t>
           </section>
 
           <section title="Extended Route Tag">
@@ -1716,20 +1544,16 @@ Level-1     level-1-2       level-1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                      Extended Route Tag (one or more)         | 
+  |                 Extended Route Tag (one or more)              | 
   |                                                               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
 
-            <t>where:</t>
+            <t>Length is a multiple of 8.</t>
 
-            <t>Type is 285</t>
-
-            <t>Length is a multiple of 8</t>
-
-            <t>Extended Route Tag contains one or more Extended Route Tags as
-            learned in the IGP topology.</t>
+            <t>The 'Extended Route Tag' field contains one or more Extended
+            Route Tags as learned in the IGP topology.</t>
           </section>
 
           <section title="Prefix Metric TLV">
@@ -1749,11 +1573,7 @@ Level-1     level-1-2       level-1
   </artwork>
             </figure>
 
-            <t>where:</t>
-
-            <t>Type is 286</t>
-
-            <t>Length is 4</t>
+            <t>Length is 4.</t>
           </section>
 
           <section title="OSPF Forwarding Address TLV">
@@ -1774,12 +1594,8 @@ Level-1     level-1-2       level-1
   </artwork>
             </figure>
 
-            <t>where:</t>
-
-            <t>Type is 287</t>
-
             <t>Length is 4 for an IPv4 forwarding address an 16 for an IPv6
-            forwarding address</t>
+            forwarding address.</t>
           </section>
         </section>
       </section>
@@ -2050,276 +1866,199 @@ Level-1     level-1-2       level-1
 
       <texttable anchor="BGPLSCODEPOINTS"
                  title="Summary Table of TLV/SubTLV Codepoints">
-        <ttcol align="center">TLV/SubTLV</ttcol>
-
+        <ttcol align="center">TLV Code Point</ttcol>
         <ttcol align="left">Description</ttcol>
-
         <ttcol align="center">IS-IS TLV/Sub-TLV</ttcol>
-
         <ttcol align="left">Value defined in:</ttcol>
 
+        <!-- NLRI TLVs -->
         <c>256</c>
-
-        <c>Identifier</c>
-
-        <c>--</c>
-
-        <c><xref target="IDENTIFIERS"></xref></c>
-
-        <c>257</c>
-
         <c>Local Node Descriptors</c>
-
-        <c>--</c>
-
-        <c><xref target="LOCALNODEDESC"></xref></c>
-
-        <c>258</c>
-
+        <c>--</c><c>
+        <xref target="LOCALNODEDESC"></xref></c>
+        
+        <c>257</c>
         <c>Remote Node Descriptors</c>
-
         <c>--</c>
-
         <c><xref target="REMOTENODEDESC"></xref></c>
 
-        <c>259</c>
-
-        <c>Autonomous System</c>
-
-        <c>--</c>
-
-        <c><xref target="node_desc_tlvs"></xref></c>
-
-        <c>260</c>
-
-        <c>BGP Identifier</c>
-
-        <c>--</c>
-
-        <c><xref target="node_desc_tlvs"></xref></c>
-
-        <c>261</c>
-
-        <c>ISO Node-ID</c>
-
-        <c>--</c>
-
-        <c><xref target="node_desc_tlvs"></xref></c>
-
-        <c>262</c>
-
-        <c>IPv4 Router-ID</c>
-
-        <c>--</c>
-
-        <c><xref target="node_desc_tlvs"></xref></c>
-
-        <c>263</c>
-
-        <c>IPv6 Router-ID</c>
-
-        <c>--</c>
-
-        <c><xref target="node_desc_tlvs"></xref></c>
-
-        <c>264</c>
-
+        <c>258</c>
         <c>Link Local/Remote Identifiers</c>
-
         <c>22/4</c>
-
         <c><xref target="RFC5307"></xref>/1.1</c>
 
-        <c>265</c>
-
+        <c>259</c>
         <c>IPv4 interface address</c>
-
         <c>22/6</c>
-
         <c><xref target="RFC5305"></xref>/3.2</c>
 
-        <c>266</c>
-
+        <c>260</c>
         <c>IPv4 neighbor address</c>
-
         <c>22/8</c>
-
         <c><xref target="RFC5305"></xref>/3.3</c>
 
-        <c>267</c>
-
+        <c>261</c>
         <c>IPv6 interface address</c>
-
         <c>22/12</c>
-
         <c><xref target="RFC6119"></xref>/4.2</c>
 
-        <c>268</c>
-
+        <c>262</c>
         <c>IPv6 neighbor address</c>
-
         <c>22/13</c>
-
         <c><xref target="RFC6119"></xref>/4.3</c>
 
-        <c>256/5</c>
-
+        <c>263</c>
         <c>Multi Topology ID</c>
-
         <c>--</c>
-
         <c><xref target="MTIDTLV"></xref></c>
 
-        <c>269</c>
-
-        <c>Administrative group (color)</c>
-
-        <c>22/3</c>
-
-        <c><xref target="RFC5305"></xref>/3.1</c>
-
-        <c>270</c>
-
-        <c>Maximum link bandwidth</c>
-
-        <c>22/9</c>
-
-        <c><xref target="RFC5305"></xref>/3.3</c>
-
-        <c>271</c>
-
-        <c>Max. reservable link bandwidth</c>
-
-        <c>22/10</c>
-
-        <c><xref target="RFC5305"></xref>/3.5</c>
-
-        <c>272</c>
-
-        <c>Unreserved bandwidth</c>
-
-        <c>22/11</c>
-
-        <c><xref target="RFC5305"></xref>/3.6</c>
-
-        <c>273</c>
-
-        <c>TE Default Metric</c>
-
-        <c>22/18</c>
-
-        <c><xref target="RFC5305"></xref>/3.7</c>
-
-        <c>274</c>
-
-        <c>Link Protection Type</c>
-
-        <c>22/20</c>
-
-        <c><xref target="RFC5307"></xref>/1.2</c>
-
-        <c>275</c>
-
-        <c>MPLS Protocol Mask</c>
-
+        <c>264</c>
+        <c>OSPF Route Type</c>
         <c>--</c>
+        <c><xref target="PREFIXDESC"></xref></c>
 
-        <c><xref target="MPLSPROTOTLV"></xref></c>
+        <!-- NLRI SubTLVs -->
 
-        <c>276</c>
-
-        <c>Metric</c>
-
+        <c>512</c>
+        <c>Autonomous System</c>
         <c>--</c>
+        <c><xref target="node_desc_tlvs"></xref></c>
 
-        <c><xref target="METTLV"></xref></c>
-
-        <c>277</c>
-
-        <c>Shared Risk Link Group</c>
-
+        <c>513</c>
+        <c>BGP Identifier</c>
         <c>--</c>
+        <c><xref target="node_desc_tlvs"></xref></c>
 
-        <c><xref target="SRLGTLV"></xref></c>
-
-        <c>278</c>
-
-        <c>OSPF specific link attribute</c>
-
+        <c>514</c>
+        <c>ISO Node-ID</c>
         <c>--</c>
+        <c><xref target="node_desc_tlvs"></xref></c>
 
-        <c><xref target="OSPFLINKSPECIFIC"></xref></c>
-
-        <c>279</c>
-
-        <c>IS-IS Specific Link Attribute</c>
-
+        <c>515</c>
+        <c>IPv4 Router-ID</c>
         <c>--</c>
+        <c><xref target="node_desc_tlvs"></xref></c>
 
-        <c><xref target="ISISLINKSPECIFIC"></xref></c>
+        <c>516</c>
+        <c>IPv6 Router-ID</c>
+        <c>--</c>
+        <c><xref target="node_desc_tlvs"></xref></c>
 
-        <c>280</c>
+        <c>517</c>
+        <c>Area ID</c>
+        <c>--</c>
+        <c><xref target="node_desc_tlvs"></xref></c>
 
+        <c>518</c>
+        <c>Multi-Topology ID</c>
+        <c>--</c>
+        <c><xref target="node_desc_tlvs"></xref></c>
+
+        <!-- Link State Attribute TLVs -->
+
+        <!-- Node Attributes TLVs -->
+        <c>1024</c>
         <c>Node Flag Bits</c>
-
         <c>--</c>
-
         <c><xref target="NODEFLAGBITS"></xref></c>
 
-        <c>281</c>
-
+        <c>1025</c>
         <c>OSPF Specific Node Properties</c>
-
         <c>--</c>
-
         <c><xref target="OSPFSPECIFICNODE"></xref></c>
 
-        <c>282</c>
-
+        <c>1026</c>
         <c>IS-IS Specific Node Properties</c>
-
         <c>--</c>
-
         <c><xref target="ISISSPECIFICNODE"></xref></c>
 
-        <c>283</c>
+        <c>1027</c>
+        <c>IS-IS Area Address/Domain Identifier</c>
+        <c>variable</c>
+        <c>XXX: Do we need this? No definition</c>
+ 
+       <!-- Link  Attribute TLVs -->
 
-        <c>IGP Flags</c>
+        <c>1088</c>
+        <c>Administrative group (color)</c>
+        <c>22/3</c>
+        <c><xref target="RFC5305"></xref>/3.1</c>
 
+        <c>1089</c>
+        <c>Maximum link bandwidth</c>
+        <c>22/9</c>
+        <c><xref target="RFC5305"></xref>/3.3</c>
+
+        <c>1090</c>
+        <c>Max. reservable link bandwidth</c>
+        <c>22/10</c>
+        <c><xref target="RFC5305"></xref>/3.5</c>
+
+        <c>1091</c>
+        <c>Unreserved bandwidth</c>
+        <c>22/11</c>
+        <c><xref target="RFC5305"></xref>/3.6</c>
+
+        <c>1092</c>
+        <c>TE Default Metric</c>
+        <c>22/18</c>
+        <c><xref target="RFC5305"></xref>/3.7</c>
+
+        <c>1093</c>
+        <c>Link Protection Type</c>
+        <c>22/20</c>
+        <c><xref target="RFC5307"></xref>/1.2</c>
+
+        <c>1094</c>
+        <c>MPLS Protocol Mask</c>
         <c>--</c>
+        <c><xref target="MPLSPROTOTLV"></xref></c>
 
+        <c>1095</c>
+        <c>Metric</c>
+        <c>--</c>
+        <c><xref target="METTLV"></xref></c>
+
+        <c>1096</c>
+        <c>Shared Risk Link Group</c>
+        <c>--</c>
+        <c><xref target="SRLGTLV"></xref></c>
+
+        <c>1097</c>
+        <c>OSPF specific link attribute</c>
+        <c>--</c>
+        <c><xref target="OSPFLINKSPECIFIC"></xref></c>
+
+        <c>1098</c>
+        <c>IS-IS Specific Link Attribute</c>
+        <c>--</c>
+        <c><xref target="ISISLINKSPECIFIC"></xref></c>
+
+        <!-- Prefix Attributes TLVs -->
+
+        <c>1152</c>
+        <c>IGP Flags</c>
+        <c>--</c>
         <c><xref target="IGPFLAGS"></xref></c>
 
-        <c>284</c>
-
+        <c>1153</c>
         <c>Route Tag</c>
-
         <c>--</c>
-
         <c><xref target="RFC5130"></xref></c>
 
-        <c>285</c>
-
+        <c>1154</c>
         <c>Extended Tag</c>
-
         <c>--</c>
-
         <c><xref target="RFC5130"></xref></c>
 
-        <c>286</c>
-
+        <c>1155</c>
         <c>Prefix Metric</c>
-
         <c>--</c>
-
         <c><xref target="RFC5305"></xref></c>
 
-        <c>287</c>
-
+        <c>1156</c>
         <c>OSPF Forwarding Address</c>
-
         <c>--</c>
-
         <c><xref target="RFC2328"></xref></c>
       </texttable>
     </section>
