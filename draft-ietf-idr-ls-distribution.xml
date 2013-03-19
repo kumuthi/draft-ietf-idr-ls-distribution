@@ -85,7 +85,7 @@
       </address>
     </author>
 
-    <date day="15" month="March" year="2013" />
+    <date day="20" month="March" year="2013" />
 
     <workgroup>Inter-Domain Routing</workgroup>
 
@@ -887,6 +887,9 @@
           Reachability information is encoded as one or more 2-tuples of the
           form &lt;length, prefix&gt;, whose fields are described below:</t>
 
+<!--FIXME we better should encapsulate the prefix information into a TLV.
+this makes further extensiosn easier - suggest to put it under the prefix descriptor section-->
+
           <figure anchor="PREFIXNLRI" title="Prefix NLRI format">
             <artwork>
                   +---------------------------+
@@ -1280,6 +1283,7 @@
 
   Where:
 
+<!--FIXME  -->
     Type: XXX renumber
     Length:variable 
   </artwork>
@@ -1948,7 +1952,7 @@
       Yeung, Murtuza Lightwala, John Scudder, Kaliraj Vairavakkalai, Les
       Ginsberg, Liem Nguyen, Manish Bhardwaj, Mike Shand, Peter Psenak, Rex
       Fernando, Richard Woundy, Steven Luong, Tamas Mondal, Waqas Alam, Vipin
-      Kumar, Naiming Shen and Yakov Rekhter for their comments.</t>
+      Kumar, Naiming Shen, Balaji Rajagopalan and Yakov Rekhter for their comments.</t>
     </section>
   </middle>
 
