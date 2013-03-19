@@ -501,11 +501,12 @@
         target="RFC6549"></xref>.</t>
 
         <t>The 64-Bit 'Identifier' field is used to associate the NLRI to a routing
-        instance and domain. (FIXME: s/routing instance/IGP instance/??)</t>
+        instance and domain. <!--FIXME: s/routing instance/IGP instance/??)-->
+	</t>
 
         <t>Each Node Descriptor and Link Descriptor consists of one or more TLVs
         described in the following sections. The sender of an UPDATE message
-        MUST order the TLVs within a Node Descriptor or a Link Descriptor in
+        MUST order the TLVs within a Node, Link Descriptor or a Prefix Descriptor in
         ascending order of TLV type.</t>
 
 
@@ -592,19 +593,19 @@
 
               <c>513</c>
               <c>BGP Identifier</c>
-              <c>8</c>
+              <c>4</c>
 
               <c>514</c>
-              <c>ISO Node-ID</c>
+              <c>ISO System ID + PSN</c>
               <c>7</c>
 
               <c>515</c>
-              <c>IPv4 Router-ID</c>
-              <c>4,8</c>
+              <c>IPv4 Router-ID + PSN</c>
+              <c>5</c>
 
               <c>516</c>
-              <c>IPv6 Router-ID</c>
-              <c>16,32</c>
+              <c>IPv6 Router-ID + PSN</c>
+              <c>17</c>
 
               <c>517</c>
               <c>Area-ID</c>
@@ -616,32 +617,40 @@
 
             </texttable>
 
-            <t>The TLV values in Node Descriptor Sub-TLVs are defined as
+            <t>The subTLV values in Node Descriptor TLVs are defined as
             follows:</t>
 
             <t><list style="hanging">
               <t hangText="Autonomous System:">opaque value (32 Bit AS
               Number)</t>
 
-              <t hangText="BGP-Identifier:">opaque value (32 Bit AS ID);
+              <t hangText="BGP-Identifier:">opaque value (32 Bit ID);
               uniquely identifying the BGP-LS speaker within an AS.</t>
 
               <t hangText="ISO Node ID:">ISO node-ID (6 octets ISO system-ID)
               followed by a PSN octet in case LAN "Pseudonode" information gets
-              advertised. The PSN octet must be zero for non-LAN
+              advertised. The PSN octet MUST be zero for non-LAN
               "Pseudonodes".</t>
 
               <t hangText="IPv4 Router ID:">opaque value (can be an IPv4 address
-              or an 32 Bit router ID). When encoding an OSPF Designated Router
-              ID, the length is 8 (first 4 bytes is the Router-ID originating
-              the Type-2 LSA and next 4 bytes are taken from the Type-2 LSA
-              ID). In other cases, the length is 4.</t>
+              or an 32 Bit router ID) followed by a Pseudonode octet. The Pseudonode
+	      octet is used to discriminate a Pseudonode from a Real Node for LANs.
+	      An Implementation MUST set the Pseudonode Byte to zero for
+	      Non Pseudonodes. An Implementation SHOULD set the Pseudonode Byte
+	      to non-zero for a Node representing a LAN. When encoding a Pseudonode
+	      for OSPF the router-ID is the IP Address of the Designated Router.
+	      To disambiguate The Pseudonode with a non-Pseudonode router the
+	      Pseudonode Byte should be set to 1.</t>
 
               <t hangText="IPv6 Router ID:">opaque value (can be an IPv6 address
-              or an 128 Bit router ID). When encoding an OSPF Designated Router
-              ID, the length is 32 (first 16 bytes is the Router-ID originating
-              the Type-2 LSA and next 16 bytes are taken from the Type-2 LSA
-              ID). In other cases, the length is 16.</t>
+              or an 128 Bit router ID) followed by a Pseudonode octet. The Pseudonode
+	      octet is used to discriminate a Pseudonode from a Real Node for LANs.
+	      An Implementation MUST set the Pseudonode Byte to zero for
+	      Non Pseudonodes. An Implementation SHOULD set the Pseudonode Byte
+	      to non-zero for a Node representing a LAN. When encoding a Pseudonode
+	      for OSPF the router-ID is the IP Address of the Designated Router.
+	      To disambiguate The Pseudonode with a non-Pseudonode router the
+	      Pseudonode Byte should be set to 1.</t>
 
               <t hangText="Area ID:">It is used to identify the 32 Bit area to
               which the NLRI belongs. Area Identifier allows the different NLRIs
@@ -649,7 +658,7 @@
               </t>
 		
               <t hangText="MT-ID:">
-                The Multi Topology ID TLV (type: XXX renumber) carries the Multi
+                The Multi Topology ID subTLV (Type: 518) carries the Multi
                 Topology ID for the link, node or prefix. The semantics of the
                 Multi Topology ID are defined in <xref target="RFC5120">RFC5120,
                 Section 7.2</xref>, and the OSPF Multi Topology ID), defined in
@@ -673,21 +682,32 @@
                 Type.
               </t>
 
-              <t>There can be at most one instance of each TLV type present in
+              <t>There can be at most one instance of each subTLV type present in
               any Node Descriptor. The TLV ordering within a Node descriptor
-              MUST be kept in order of increasing numeric value of type. TLVs
-              259 and 260 specify administrative context in which TLVs 261-263
+              MUST be kept in order of increasing numeric value of type.
+	      This needs to be done in order to compare NLRIs, even when a
+	      implementation would encounter a unknown subTLV. Using stable
+	      sorting an implementation can do a binary compare of NLRIs and
+	      hence allow incremental deployment of new key subTLVs.
+
+<!-- FIXME - the below does not make much sense; all the subTLVs contain
+  essential key information (and not secondary identifiers).
+  suggest to delete this entirely.
+
+	      TLVs 259 and 260 specify administrative context in which TLVs 261-263
               are to be evaluated. The first TLV from range 261-263 is to be
               interpreted as the primary node identifier by which the node can
               be referenced within its administrative contexts. Any further TLVs
               are to be treated as secondary identifiers, which may be used for
               cross-reference, but are to be treated as if they are object
-              attributes.</t>
+              attributes.
+-->
+	      </t>
             </list></t>
           </section>
 
           <section anchor="gbl_uniqueness"
-                   title="Globally Unique BGP-LS Identifiers">
+                   title="Globally Unique Node/Link/Prefix Identifiers">
             <t>One problem that needs to be addressed is the ability to
             identify an IGP node globally (by "global", we mean within the
             BGP-LS database collected by all BGP-LS speakers that talk to each
@@ -702,12 +722,13 @@
 
             <t>We define an "IGP domain" to be the set of nodes (and links),
             within which, each node has a unique IGP representation by using
-            the combination of area-id, IGP router-id, Level, instance ID,
-            etc. The problem is that BGP brings nodes from multiple
+            the combination of Area-ID, Router-ID, Protocol, Instance ID,
+            etc. The problem is that BGP may receive node/link/prefix information
+	    from multiple
             independent "IGP domains" and we need to distinguish between them.
             Moreover, we can't assume there is always one and only one IGP
-            domain per Autonomous System (or Autonomous System confederation
-            member). Following cases illustrate scenario's where IGP domain
+            domain per Autonomous System.
+	    Following cases illustrate scenario's where IGP domain
             and ASs boundaries do not match.</t>
 
             <t>(i) Stub ASs or non-contiguous AS: One can have an AS that has
