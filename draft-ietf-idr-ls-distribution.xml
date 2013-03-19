@@ -512,8 +512,8 @@
 
         <section title="Node Descriptors">
           <t>Each link gets anchored by at least a pair of router-IDs. Since
-          there are many Router-IDs formats (32 Bit IPv4 router-ID, 56 Bit ISO
-          Node-ID and 128 Bit IPv6 router-ID) a link may be anchored by more
+          there are many Router-IDs formats (32 Bit IPv4 router-ID, 48 Bit ISO
+          System-ID and 128 Bit IPv6 router-ID) a link may be anchored by more
           than one Router-ID pair. The set of Local and Remote Node
           Descriptors describe which Protocols Router-IDs will be following to
           "anchor" the link described by the "Link attribute TLVs". There must
@@ -526,10 +526,42 @@
           anchor are globally unique. However there may be router-ID spaces
           (e.g. ISO) where not even a global registry exists, or worse,
           Router-IDs have been allocated following private-IP <xref
-          target="RFC1918">RFC 1918</xref> allocation. We use AS Number (or
-          Confederation ID) and BGP Identifier in order to disambiguate the
+          target="RFC1918">RFC 1918</xref> allocation. We use AS Number
+	  and BGP Identifier in order to disambiguate the
           Router-IDs, as described in <xref
           target="gbl_uniqueness"></xref>.</t>
+
+          <section anchor="gbl_uniqueness"
+                   title="Globally Unique Node/Link/Prefix Identifiers">
+            <t>One problem that needs to be addressed is the ability to
+            identify an IGP node globally (by "global", we mean within the
+            BGP-LS database collected by all BGP-LS speakers that talk to each
+            other). This can be expressed through the following two
+            requirements:</t>
+
+            <t>(A) The same node must not be represented by two keys
+            (otherwise one node will look like two nodes).</t>
+
+            <t>(B) Two different nodes must not be represented by the same key
+            (otherwise, two nodes will look like one node).</t>
+
+            <t>We define an "IGP domain" to be the set of nodes, links and prefixes,
+            within which, each node has a unique IGP representation by using
+            the combination of Area-ID, Router-ID, Protocol, Topology-ID, Instance ID,
+            etc. The problem is that BGP may receive node/link/prefix information
+	    from multiple
+            independent "IGP domains" and we need to distinguish between them.
+            Moreover, we can't assume there is always one and only one IGP
+            domain per Autonomous System. During IGP Protocol transitions it
+	    may happen that two redundant IGPs are in place.
+	    </t>
+
+	    <t>In section <xref target="node_desc_tlvs"></xref>
+	    a set of subTLVs is described, which
+	    allows to specify a flexible key for any given Node/Link information
+	    such that global uniqueness of the NLRI is ensured.
+	    </t>
+	  </section>
 
           <section anchor="LOCALNODEDESC" title="Local Node Descriptors">
             <t>The Local Node Descriptors TLV (Type 257) contains Node
@@ -594,6 +626,8 @@
               <c>513</c>
               <c>BGP Identifier</c>
               <c>4</c>
+
+<!--FIXME since we have now a 64-bit instance ID - do we need the BGP ID at all ? -->
 
               <c>514</c>
               <c>ISO System ID + PSN</c>
@@ -704,196 +738,6 @@
 -->
 	      </t>
             </list></t>
-          </section>
-
-          <section anchor="gbl_uniqueness"
-                   title="Globally Unique Node/Link/Prefix Identifiers">
-            <t>One problem that needs to be addressed is the ability to
-            identify an IGP node globally (by "global", we mean within the
-            BGP-LS database collected by all BGP-LS speakers that talk to each
-            other). This can be expressed through the following two
-            requirements:</t>
-
-            <t>(A) The same node must not be represented by two keys
-            (otherwise one node will look like two nodes).</t>
-
-            <t>(B) Two different nodes must not be represented by the same key
-            (otherwise, two nodes will look like one node).</t>
-
-            <t>We define an "IGP domain" to be the set of nodes (and links),
-            within which, each node has a unique IGP representation by using
-            the combination of Area-ID, Router-ID, Protocol, Instance ID,
-            etc. The problem is that BGP may receive node/link/prefix information
-	    from multiple
-            independent "IGP domains" and we need to distinguish between them.
-            Moreover, we can't assume there is always one and only one IGP
-            domain per Autonomous System.
-	    Following cases illustrate scenario's where IGP domain
-            and ASs boundaries do not match.</t>
-
-            <t>(i) Stub ASs or non-contiguous AS: One can have an AS that has
-            disjoint parts, each running an independent IGP domain. <figure
-                anchor="STUBASFIG" title="Stub-ASs or non-contiguous AS">
-                <artwork>
-IGP domain 1      IGP domain 2
-   AS 1              AS 1
-  +---+             +---+
-  |   |             |   |
-  +---+             +---+
-       \           /
-        +---------+
-        |         |
-        +---------+
-         Transit AS</artwork>
-              </figure>Using ASN to globally identify IGP node may break
-            requirement (B).</t>
-
-            <t>(ii) It is possible to run the same IGP domain across multiple
-            AS. <figure anchor="IGPDOMAINFIG" title="IGP Domain">
-                <artwork>
-     +----------------------+
-     | +------+   +------+  |
-     | | AS 1 |   | AS 2 |  |
-     | +------+   +------+  |
-     +----------------------+
-          IGP domain</artwork>
-              </figure>Using ASN to globally identify IGP node will break
-            requirement (A).</t>
-
-            <t>(iii) It is possible to run IGP across member-ASs in a
-            confederation. <figure anchor="CONFEDFIG" title="Confederation">
-                <artwork>
-   +-------------------------------+
-   | +--------------------------+  |
-   | | +--------+   +--------+  |  |
-   | | | member |   | member |  |  |
-   | | | AS 1   |   | AS 2   |  |  |
-   | | +--------+   +--------+  |  |
-   | +--------------------------+  |
-   |       IGP domain              |
-   +-------------------------------+
-      Confederation (confed-id 1)</artwork>
-              </figure>Using a Confederation/MemberAS identifier to globally
-            identify IGP node will break requirement (A).</t>
-
-            <t>(iv) It is possible to run more than one IGP domain within an
-            AS by setting up "transit BGP speakers". <figure
-                anchor="TRANSITBGPFIG" title="Transit BGP Node">
-                <artwork>
-   +---------------------------------+
-   | +----------+       +----------+ | 
-   | | IGP      | +---+ | IGP      | |
-   | | domain 1 +-+   +-+ domain 2 | |
-   | +----------+ +---+ +----------+ |
-   |                ^                |
-   |                |                |
-   |         Transit BGP node        |
-   +---------------------------------+
-                  AS 1</artwork>
-              </figure>Using ASN to globally identify IGP node may break
-            requirement (A).</t>
-
-            <t>In summary, there is no strict relation between BGP AS division
-            and IGP domains. Therefore, the following mechanism is proposed to
-            address the requirements. We assume that a BGP-LS speaker is
-            collocated with one and only one IGP node. The BGP-LS speaker
-            originates BGP-LS NLRIs that correspond to the objects in the LSDB
-            of that IGP node.</t>
-
-            <t>We embed a "string" (identifier) in the node descriptor to
-            globally identify the node. The question is how we construct such
-            a string, and what should be the scope of such a string so that
-            the construction of the string can be simple. Let the set of IGP
-            nodes within which LSA/LSP flooding is limited to be the "flooding
-            set". Consider a given "flooding set". We have the following three
-            possibilities:</t>
-
-            <t>Case a) There is no BGP LS speaker running on any node in the
-            flooding set.</t>
-
-            <t>Case b) There is one BGP LS speaker running on one node in the
-            flooding set.</t>
-
-            <t>Case c) There is more than one BGP LS speakers running on the
-            nodes in the flooding set.</t>
-
-            <t>For Case a), the nodes in that flooding set do not appear in
-            BGP LS database. So we can ignore that case for this discussion.
-            To satisfy requirement (B), the string we use in different IGP
-            domains must be different. One possible approach is as
-            follows:</t>
-
-            <t>Approach 1) The user configures a unique "string" on all BGP LS
-            speakers within one IGP domain.</t>
-
-            <t>Now we make an observation that simplifies the task: it is
-            sufficient to have a unique "string" per flooding set.</t>
-
-            <t>When we have a unique string per flooding set, then two nodes
-            in different IGP domains, which by definition belong to different
-            flooding sets, would have different "strings". So requirement B)
-            is satisfied. On the other hand, a given node appears only in the
-            LSDB of the nodes in the same flooding set. So a given node will
-            always have only one "string" and we satisfy requirement A). Given
-            this, we have:</t>
-
-            <t>Approach 2) Each BGP LS speaker uses the &lt;Autonomous System
-            Number, BGP Identifier&gt; as the string.</t>
-
-            <t>The combination of &lt;Autonomous System, BGP Identifier&gt; is
-            globally unique, as per <xref target="RFC6286"></xref>.</t>
-
-            <t>For Case b), which is the simplest BGP-LS deployment scenario,
-            this approach requires no additional configuration from the
-            user.</t>
-
-            <t>For Case c), however, if each BGP-LS speaker in the given
-            flooding set attaches its own &lt;Autonomous System, BGP
-            Identifier&gt;, then we will violate requirement A). So that case,
-            the user needs to choose one of the BGP-LS speakers in the
-            flooding set as the "chosen speaker" and configure the rest of the
-            BGP-LS speakers in that flooding set to use the &lt;Autonomous
-            System, BGP Identifier&gt; combination of the "chosen
-            speaker".</t>
-
-            <t>When an IGP node belongs to two or more flooding sets, it views
-            itself as a collocation of one node per flooding set and
-            accordingly encodes the NLRIs. Consider the following
-            example:<figure anchor="IGPMULTFIG"
-                title="IGP Node in multiple flooding sets">
-                <artwork>
-Level-1     level-1-2       level-1
-   N1          N0            N2
-  +---+ link1 +---+ link 2  +---+
-  |   +-------+   +---------+   |
-  +---+       +---+         +---+
-|&lt;- Level 1 -&gt;|   |&lt;- level 2 -&gt;|
-     L11                L12
-    &ldquo;str1&rdquo;             &ldquo;str2&rdquo;    </artwork>
-              </figure>The node N0 is a level 1-2 node. Link1 belongs to level
-            1 area L11, which has string "str1". Link2 belongs to level 1 area
-            L12 which has string "str2". N0 has both link1 and link2 in its
-            LSDB. If BGP LS speaker is running on N0, then N0 views itself as
-            a collocation of two nodes: N0(L11) and N0(L12) and originate
-            &lt;str1, N1, N0&gt; and &lt;str2, N0, N2&gt;.</t>
-
-            <t>To sum up, the mechanism works as follows: <list>
-                <t>1. We use &lt;Autonomous System, BGP Identifier&gt; as the
-                disambiguating string.</t>
-
-                <t>2. By default, a BGP-LS speaker uses its own ASN, BGP
-                identifier (router-id) for these fields for the NLRIs it
-                originates.</t>
-
-                <t>3. Operator has the ability to configure other &lt;ASN, BGP
-                ID&gt; per flooding set the IGP node underneath belongs to. In
-                that case, the node descriptor(s) for a given NLRI uses the
-                string corresponding to the flooding set where the node
-                belongs.</t>
-              </list></t>
-
-            <t>The operator needs to provide the configuration if there are
-            multiple BGP-LS speakers running in the same flooding set.</t>
           </section>
 
           <section title="Router-ID Anchoring Example: ISO Pseudonode">
@@ -2161,8 +2005,6 @@ Level-1     level-1-2       level-1
       <?rfc ?>
 
       <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.4655.xml"?>
-
-      <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6286.xml"?>
 
       <?rfc ?>
 
