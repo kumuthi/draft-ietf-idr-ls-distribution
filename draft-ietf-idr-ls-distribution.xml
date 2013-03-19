@@ -369,7 +369,7 @@
         <t>The format of the Link State NLRI is shown in the following
         figure.</t>
 
-        <figure anchor="SAFI1" title="Link State SAFI (TBD) NLRI Format">
+        <figure anchor="LSSAFI" title="Link State SAFI (TBD) NLRI Format">
           <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -383,7 +383,7 @@
   </artwork>
         </figure>
 
-        <figure anchor="SAFI128" title="Link State SAFI 128 NLRI Format">
+        <figure anchor="LSVPNSAFI" title="Link State VPN SAFI (TBD) NLRI Format">
           <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
