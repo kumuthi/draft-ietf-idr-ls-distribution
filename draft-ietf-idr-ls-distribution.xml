@@ -357,19 +357,21 @@
         carrying opaque information. Each Link State NLRI describes either a
         node, a link or a prefix.</t>
 
-        <t>All link, node and prefix information SHALL be encoded using a TBD
-        AFI / TBD SAFI header into those attributes.</t>
+        <t>All link, node and prefix information SHALL be encoded using
+        AFI 16388 / SAFI 71 header into those attributes. VPN link, node and
+	prefix information SHALL be encoded using AFI 16388 / SAFI 128</t>
 
         <t>In order for two BGP speakers to exchange Link-State NLRI, they
         MUST use BGP Capabilities Advertisement to ensure that they both are
         capable of properly processing such NLRI. This is done as specified in
         <xref target="RFC4760"></xref>, by using capability code 1
-        (multi-protocol BGP), with an AFI/SAFI TBD.</t>
+        (multi-protocol BGP), with an AFI 16388 / SAFI 71 and
+	AFI 16388 / SAFI 128 for the VPN flavor.</t>
 
         <t>The format of the Link State NLRI is shown in the following
         figure.</t>
 
-        <figure anchor="LSSAFI" title="Link State SAFI (TBD) NLRI Format">
+        <figure anchor="LSSAFI" title="Link State AFI 16388 / SAFI 71 NLRI Format">
           <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -383,7 +385,7 @@
   </artwork>
         </figure>
 
-        <figure anchor="LSVPNSAFI" title="Link State VPN SAFI (TBD) NLRI Format">
+        <figure anchor="LSVPNSAFI" title="Link State VPN AFI 16388 / SAFI 128 NLRI Format">
           <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
