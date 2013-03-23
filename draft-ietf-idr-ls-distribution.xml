@@ -339,9 +339,7 @@
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                                                               |
-  |                         Value (variable)                      |
-  |                                                               |
+  //                        Value (variable)                     //
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
         </figure>
@@ -357,19 +355,21 @@
         carrying opaque information. Each Link State NLRI describes either a
         node, a link or a prefix.</t>
 
-        <t>All link, node and prefix information SHALL be encoded using a TBD
-        AFI / TBD SAFI header into those attributes.</t>
+        <t>All link, node and prefix information SHALL be encoded using
+        AFI 16388 / SAFI 71 header into those attributes. VPN link, node and
+	prefix information SHALL be encoded using AFI 16388 / SAFI 128</t>
 
         <t>In order for two BGP speakers to exchange Link-State NLRI, they
         MUST use BGP Capabilities Advertisement to ensure that they both are
         capable of properly processing such NLRI. This is done as specified in
         <xref target="RFC4760"></xref>, by using capability code 1
-        (multi-protocol BGP), with an AFI/SAFI TBD.</t>
+        (multi-protocol BGP), with an AFI 16388 / SAFI 71 and
+	AFI 16388 / SAFI 128 for the VPN flavor.</t>
 
         <t>The format of the Link State NLRI is shown in the following
         figure.</t>
 
-        <figure anchor="LSSAFI" title="Link State SAFI (TBD) NLRI Format">
+        <figure anchor="LSSAFI" title="Link State AFI 16388 / SAFI 71 NLRI Format">
           <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -377,13 +377,13 @@
   |            NLRI Type          |     Total NLRI Length         |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                                                               |
-  |                   Link-State NLRI (variable)                  |
+  //                  Link-State NLRI (variable)                 //
   |                                                               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
         </figure>
 
-        <figure anchor="LSVPNSAFI" title="Link State VPN SAFI (TBD) NLRI Format">
+        <figure anchor="LSVPNSAFI" title="Link State VPN AFI 16388 / SAFI 128 NLRI Format">
           <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -395,7 +395,7 @@
   |                                                               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                                                               |
-  |                   Link-State NLRI (variable)                  |
+  //                  Link-State NLRI (variable)                 //
   |                                                               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     </artwork>
@@ -470,8 +470,6 @@
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                 Prefix Descriptors (variable)                 |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |  IP Reachability Information (variable; one or more prefixes) |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
         </figure>
 
@@ -500,8 +498,8 @@
         over the same link. See <xref target="RFC6822"></xref> and <xref
         target="RFC6549"></xref>.</t>
 
-        <t>The 64-Bit 'Identifier' field is used to associate the NLRI to a routing
-        instance and domain. <!--FIXME: s/routing instance/IGP instance/??)-->
+        <t>The 64-Bit 'Identifier' field is used to associate the NLRI to an IGP
+        routing instance and domain.
 	</t>
 
         <t>Each Node Descriptor and Link Descriptor consists of one or more TLVs
@@ -564,11 +562,10 @@
 	  </section>
 
           <section anchor="LOCALNODEDESC" title="Local Node Descriptors">
-            <t>The Local Node Descriptors TLV (Type 257) contains Node
-            Descriptors for the node anchoring the local end of the link. The
-            length of this TLV is variable. The value contains one or more
-            Node Descriptor Sub-TLVs defined in <xref
-            target="node_desc_tlvs"></xref>.</t>
+            <t>The Local Node Descriptors TLV contains Node Descriptors for the
+            node anchoring the local end of the link. The length of this TLV is
+            variable. The value contains one or more Node Descriptor Sub-TLVs
+            defined in <xref target="node_desc_tlvs"></xref>.</t>
 
             <figure anchor="LOCALNODEDESCTLV"
                     title="Local Node Descriptors TLV format">
@@ -587,11 +584,10 @@
           </section>
 
           <section anchor="REMOTENODEDESC" title="Remote Node Descriptors">
-            <t>The Remote Node Descriptors TLV (Type 258) contains Node
-            Descriptors for the node anchoring the remote end of the link. The
-            length of this TLV is variable. The value contains one or more
-            Node Descriptor Sub-TLVs defined in <xref
-            target="node_desc_tlvs"></xref>.</t>
+            <t>The Remote Node Descriptors TLV contains Node Descriptors for the
+            node anchoring the remote end of the link. The length of this TLV is
+            variable. The value contains one or more Node Descriptor Sub-TLVs
+            defined in <xref target="node_desc_tlvs"></xref>.</t>
 
             <figure anchor="REMOTENODEDESCTLV"
                     title="Remote Node Descriptors TLV format">
@@ -602,7 +598,7 @@
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                                                               |
-  |               Node Descriptor Sub-TLVs (variable)             |
+  //              Node Descriptor Sub-TLVs (variable)            //
   |                                                               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
@@ -627,7 +623,9 @@
               <c>BGP Identifier</c>
               <c>4</c>
 
-<!--FIXME since we have now a 64-bit instance ID - do we need the BGP ID at all ? -->
+<!--FIXME since we have now a 64-bit instance ID - do we need the BGP ID at all ?
+Jan: Yes we do - the 64 bit instance ID is opaque, It may or may not include the 
+BGP ID and the AS#: should we mandate it? -->
 
               <c>514</c>
               <c>ISO System ID + PSN</c>
@@ -667,41 +665,40 @@
               "Pseudonodes".</t>
 
               <t hangText="IPv4 Router ID:">opaque value (can be an IPv4 address
-              or an 32 Bit router ID) followed by a Pseudonode octet. The Pseudonode
-	      octet is used to discriminate a Pseudonode from a Real Node for LANs.
-	      An Implementation MUST set the Pseudonode Byte to zero for
-	      Non Pseudonodes. An Implementation SHOULD set the Pseudonode Byte
-	      to non-zero for a Node representing a LAN. When encoding a Pseudonode
-	      for OSPF the router-ID is the IP Address of the Designated Router.
-	      To disambiguate The Pseudonode with a non-Pseudonode router the
-	      Pseudonode Byte should be set to 1.</t>
+              or an 32 Bit router ID) followed by a Pseudonode octet. The
+              Pseudonode octet is used to discriminate a Pseudonode from a Real
+              Node for LANs.  An Implementation MUST set the Pseudonode Byte to
+              zero for Non Pseudonodes. An Implementation SHOULD set the
+              Pseudonode Byte to non-zero for a Node representing a LAN. When
+              encoding a Pseudonode for OSPF the router-ID is the IP Address of
+              the Designated Router.  To disambiguate The Pseudonode with a
+              non-Pseudonode router the Pseudonode Byte should be set to 1.</t>
 
               <t hangText="IPv6 Router ID:">opaque value (can be an IPv6 address
-              or an 128 Bit router ID) followed by a Pseudonode octet. The Pseudonode
-	      octet is used to discriminate a Pseudonode from a Real Node for LANs.
-	      An Implementation MUST set the Pseudonode Byte to zero for
-	      Non Pseudonodes. An Implementation SHOULD set the Pseudonode Byte
-	      to non-zero for a Node representing a LAN. When encoding a Pseudonode
-	      for OSPF the router-ID is the IP Address of the Designated Router.
-	      To disambiguate The Pseudonode with a non-Pseudonode router the
-	      Pseudonode Byte should be set to 1.</t>
+              or an 128 Bit router ID) followed by a Pseudonode octet. The
+              Pseudonode octet is used to discriminate a Pseudonode from a Real
+              Node for LANs.  An Implementation MUST set the Pseudonode Byte to
+              zero for Non Pseudonodes. An Implementation SHOULD set the
+              Pseudonode Byte to non-zero for a Node representing a LAN. When
+              encoding a Pseudonode for OSPF the router-ID is the IP Address of
+              the Designated Router.  To disambiguate The Pseudonode with a
+              non-Pseudonode router the Pseudonode Byte should be set to 1.</t>
 
               <t hangText="Area ID:">It is used to identify the 32 Bit area to
               which the NLRI belongs. Area Identifier allows the different NLRIs
               of the same router to be discriminated.
               </t>
 		
-              <t hangText="MT-ID:">
-                The Multi Topology ID subTLV (Type: 518) carries the Multi
-                Topology ID for the link, node or prefix. The semantics of the
-                Multi Topology ID are defined in <xref target="RFC5120">RFC5120,
-                Section 7.2</xref>, and the OSPF Multi Topology ID), defined in
-                <xref target="RFC4915">RFC4915, Section 3.7</xref>. If the value
-                in the Multi Topology ID TLV is derived from OSPF, then the
-                upper 9 bits of the Multi Topology ID are set to 0.
+              <t hangText="MT-ID:">carries the Multi Topology ID for the link,
+              node or prefix. The semantics of the Multi Topology ID are defined
+              in <xref target="RFC5120">RFC5120, Section 7.2</xref>, and the
+              OSPF Multi Topology ID), defined in <xref
+              target="RFC4915">RFC4915, Section 3.7</xref>. If the value in the
+              Multi Topology ID TLV is derived from OSPF, then the upper 9 bits
+              of the Multi Topology ID are set to 0.
 
-                <figure anchor="MTIDTLV" title="Multi Topology ID TLV format">
-                  <artwork>
+              <figure anchor="MTIDTLV" title="Multi Topology ID TLV format">
+                <artwork>
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -709,35 +706,21 @@
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |R R R R|   Multi Topology ID   | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-              </artwork>
-                </figure>
+                </artwork>
+              </figure>
 
-                The Multi Topology Identifier SubTLV MAY be present in any NLRI
-                Type.
-              </t>
+              The Multi Topology Identifier SubTLV MAY be present in any NLRI
+              Type.</t>
 
-              <t>There can be at most one instance of each subTLV type present in
-              any Node Descriptor. The TLV ordering within a Node descriptor
-              MUST be kept in order of increasing numeric value of type.
-	      This needs to be done in order to compare NLRIs, even when a
-	      implementation would encounter a unknown subTLV. Using stable
-	      sorting an implementation can do a binary compare of NLRIs and
-	      hence allow incremental deployment of new key subTLVs.
-
-<!-- FIXME - the below does not make much sense; all the subTLVs contain
-  essential key information (and not secondary identifiers).
-  suggest to delete this entirely.
-
-	      TLVs 259 and 260 specify administrative context in which TLVs 261-263
-              are to be evaluated. The first TLV from range 261-263 is to be
-              interpreted as the primary node identifier by which the node can
-              be referenced within its administrative contexts. Any further TLVs
-              are to be treated as secondary identifiers, which may be used for
-              cross-reference, but are to be treated as if they are object
-              attributes.
--->
-	      </t>
-            </list></t>
+              <t>There can be at most one instance of each subTLV type present
+              in any Node Descriptor. The TLV ordering within a Node descriptor
+              MUST be kept in order of increasing numeric value of type. This
+              needs to be done in order to compare NLRIs, even when a
+              implementation would encounter a unknown subTLV. Using stable
+              sorting an implementation can do a binary compare of NLRIs and
+              hence allow incremental deployment of new key subTLVs.</t>
+            </list>
+            </t>
           </section>
 
           <section title="Router-ID Anchoring Example: ISO Pseudonode">
@@ -853,58 +836,90 @@
             <c>264</c>
             <c>OSPF Route Type</c>
             <c>1</c>
+
+            <c>265</c>
+            <c>IP Reachability Information</c>
+            <c>variable</c>
           </texttable>
 
-            <t>The TLV values in Node Descriptor Sub-TLVs are defined as
-            follows:</t>
+            <t>The Prefix Descriptor TLVs are defined in the following sections. </t>
 
-            <t>
+            <section title="OSPF Route Type">
+              <t> OSPF Route Type is an optional TLV that MAY be present in
+              Prefix NLRIs. It is used to identify the OSPF route-type of the
+              prefix. It is used when an OSPF prefix is advertised in the OSPF
+              domain with multiple different route-types. The Route Type TLV
+              allows to discriminate these advertisements. The format of the
+              OSPF Route Type TLV is shown in the following figure.</t>
+
+              <figure anchor="ROUTETYPETLV" title="OSPF Route Type TLV Format">
+                <artwork>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |              Type             |             Length            |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Route Type   |
+  +-+-+-+-+-+-+-+-+
+                </artwork>
+              </figure>
+
+              <t>where the Type and Length fields of the TLV are defined in
+              <xref target="table_prefix_descriptor_tlv"/>. The OSPF Route Type
+              field values are defined in the OSPF protocol, and can be on of
+              the following:
+
               <list style="hanging">
-                <t hangText="OSPF Route Type:">is an optional SubTLV that MAY be
-                present in the Prefix NLRIs. It is used to identify the OSPF
-                route-type of the prefix. It is used when an OSPF prefix is
-                advertised in the OSPF domain with multiple different
-                route-types. The Route Type Identifier allows to discriminate
-                these advertisements. OSPF protocol defines the following OSPF
-                Route Types:
-                
-                <list style="hanging">
-                  <t>Intra-Area (0x1)</t>
-                  <t>Inter-Area (0x2)</t>
-                  <t>External 1 (0x3)</t>
-                  <t>External 2 (0x4)</t>
-                  <t>NSSA 1 (0x5)</t>
-                  <t>NSSA 2 (0x6)</t>
-                </list></t>
+                <t>Intra-Area (0x1)</t>
+                <t>Inter-Area (0x2)</t>
+                <t>External 1 (0x3)</t>
+                <t>External 2 (0x4)</t>
+                <t>NSSA 1 (0x5)</t>
+                <t>NSSA 2 (0x6)</t>
               </list>
-            </t>
-        </section>
+              </t>
+            </section>
 
-        <section title="IP Reachability Information">
-          <t>The Prefix NLRI is a variable length field that contains one or
-          more IP address prefixes (IPv4 or IPv6) originally advertised in
-          the IGP topology. The NLRI Type determines the address-family.
-          Reachability information is encoded as one or more 2-tuples of the
-          form &lt;length, prefix&gt;, whose fields are described below:</t>
+            <section title="IP Reachability Information">
+              <t>The IP Reachability Information is a mandatory TLV that
+              contains one or more IP address prefixes (IPv4 or IPv6) originally
+              advertised in the IGP topology. The format of the IP Reachability
+              Information TLV is shown in the following figure.</t>
 
-<!--FIXME we better should encapsulate the prefix information into a TLV.
-this makes further extensiosn easier - suggest to put it under the prefix descriptor section-->
+              <figure anchor="IPREACHABILITYTLV" title="IP Reachability Information TLV Format">
+                <artwork>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |              Type             |             Length            |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  //                  IP Prefix Tuples (variable)                //
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                </artwork>
+              </figure>
+              <t>where the Type and Length fields of the TLV are defined in
+              <xref target="table_prefix_descriptor_tlv"/>. The IP Prefix Tuples
+              field determines the address-family reachability information, and
+              is encoded as one or more 2-tuples of the form &lt;length,
+              prefix&gt;, whose fields are described in the following
+              figure:</t>
 
-          <figure anchor="PREFIXNLRI" title="Prefix NLRI format">
-            <artwork>
-                  +---------------------------+
-                  |   Length (1 octet)        |
-                  +---------------------------+
-                  |   Prefix (variable)       |
-                  +---------------------------+
-            </artwork>
-          </figure>
+              <figure anchor="PREFIXNLRI" align="center" title="Prefix Tuple format">
+                <artwork>
++---------------------------+
+|   Length (1 octet)        |
++---------------------------+
+|   Prefix (variable)       |
++---------------------------+
+                </artwork>
+              </figure>
 
-          <t>The 'Length' field contains the length of the prefix in bits.
-          Only the most significant octets of the prefix are encoded. I.e. 1
-          octet for prefix length 1 up to 8, 2 octets for prefix length 9 to
-          16, 3 octets for prefix length 17 up to 24 and 4 octets for prefix
-          length 25 up to 32, etc.</t>
+              <t>The 'Length' field contains the length of the prefix in bits.
+              Only the most significant octets of the prefix are encoded. I.e. 1
+              octet for prefix length 1 up to 8, 2 octets for prefix length 9 to
+              16, 3 octets for prefix length 17 up to 24 and 4 octets for prefix
+              length 25 up to 32, etc.</t>
+            </section>
         </section>
       </section>
 
@@ -952,7 +967,7 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                           Flags  (variable)                   |
+  //                        Flags (variable)                     //
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
@@ -1004,9 +1019,7 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                                                               |
-  |            OSPF specific node properties (variable)           |
-  |                                                               |
+  //            OSPF specific node properties (variable)         //
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
@@ -1031,9 +1044,7 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                                                               |
-  |           IS-IS specific node properties (variable)           |
-  |                                                               |
+  //           IS-IS specific node properties (variable)         //
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
@@ -1196,7 +1207,7 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                  Shared Risk Link Group Value                 | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                          ............                         | 
+  //                         ............                        // 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                  Shared Risk Link Group Value                 | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -1229,9 +1240,7 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                                                               |
-  |            OSPF specific link attributes (variable)           |
-  |                                                               |
+  //           OSPF specific link attributes (variable)          //
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             </artwork>
             </figure>
@@ -1255,9 +1264,7 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                                                               |
-  |           IS-IS specific link attributes (variable)           |
-  |                                                               |
+  //          IS-IS specific link attributes (variable)          //
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             </artwork>
             </figure>
@@ -1278,14 +1285,8 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                 Area Identifier (variable)                    |
+  //                Area Identifier (variable)                   //
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-  Where:
-
-<!--FIXME  -->
-    Type: XXX renumber
-    Length:variable 
   </artwork>
             </figure>
 
@@ -1332,6 +1333,16 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
             <c>OSPF Forwarding Address</c>
             <c>4</c>
             <c><xref target="RFC2328"></xref></c>
+
+            <c>1157</c>
+            <c>OSPF Specific Prefix Attribute</c>
+            <c>variable</c>
+            <c><xref target="IGPSPECIFICPRFXTLV"></xref></c>
+
+            <c>1158</c>
+            <c>IS-IS Specific Prefix Attribute</c>
+            <c>variable</c>
+            <c><xref target="IGPSPECIFICPRFXTLV"></xref></c>
           </texttable>
 
           <section anchor="IGPFLAGS" title="IGP Flags TLV">
@@ -1346,7 +1357,7 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                       IGP Flags (variable)                    | 
+  //                      IGP Flags (variable)                   // 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
@@ -1414,7 +1425,6 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                 Extended Route Tag (one or more)              | 
-  |                                                               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
@@ -1458,9 +1468,32 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                 Forwarding Address (variable)                 | 
+  //                Forwarding Address (variable)                // 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  </artwork>
+              </artwork>
+            </figure>
+
+            <t>Length is 4 for an IPv4 forwarding address an 16 for an IPv6
+            forwarding address.</t>
+          </section>
+
+          <section anchor="IGPSPECIFICPRFX" title="OSPF and IS-IS Specific Prefix Information">
+
+            <t>The OSPF and IS-IS Specific Prefix information TLVs contain
+            prefix specific data carried in OSPF and IS-IS, respectively.  The
+            format of the TLV is as follow:s</t>
+
+            <figure anchor="IGPSPECIFICPRFXTLV"
+                    title="OSPF and IS-IS Prefix Specific Data TLV Format">
+              <artwork>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |              Type             |             Length            | 
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  //              Prefix Specific Data  (variable)               // 
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+              </artwork>
             </figure>
 
             <t>Length is 4 for an IPv4 forwarding address an 16 for an IPv6
@@ -1485,7 +1518,7 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
         link-local IPv6 address. The link-local IPv6 address should be used as
         described in <xref target="RFC2545"></xref>.</t>
 
-        <t>The BGP Next Hop attribute is used by each BGP-LS spaker to
+        <t>The BGP Next Hop attribute is used by each BGP-LS speaker to
         validate the NLRI it receives. However, this specification doesn't
         mandate any rule regarding the re-write of the BGP Next Hop
         attribute.</t>
@@ -1614,11 +1647,11 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
           NLRI information present in this document purely carries application
           level data that have no immediate corresponding forwarding state
           impact. As such, any churn in reachability information has different
-          impact than regular BGP update which needs to change forwarding
-          state for an entire router. Furthermore it is anticipated that
-          distribution of this NLRI will be handled by dedicated
-          route-reflectors providing a level of isolation and
-          fault-containment between different NLRI types.</t>
+          impact than regular BGP update which needs to change forwarding state
+          for an entire router. Furthermore it is anticipated that distribution
+          of this NLRI will be handled by dedicated route-reflectors providing a
+          level of isolation and fault-containment between different NLRI
+          types.</t>
         </section>
 
         <section anchor="Initial-Setup" title="Installation and Initial Setup">
@@ -1743,12 +1776,12 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
         <!-- NLRI TLVs -->
         <c>256</c>
         <c>Local Node Descriptors</c>
-        <c>--</c><c>
+        <c>---</c><c>
         <xref target="LOCALNODEDESC"></xref></c>
         
         <c>257</c>
         <c>Remote Node Descriptors</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="REMOTENODEDESC"></xref></c>
 
         <c>258</c>
@@ -1778,49 +1811,54 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
 
         <c>263</c>
         <c>Multi Topology ID</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="MTIDTLV"></xref></c>
 
         <c>264</c>
         <c>OSPF Route Type</c>
-        <c>--</c>
+        <c>---</c>
+        <c><xref target="PREFIXDESC"></xref></c>
+
+        <c>265</c>
+        <c>IP Reachability Information</c>
+        <c>---</c>
         <c><xref target="PREFIXDESC"></xref></c>
 
         <!-- NLRI SubTLVs -->
 
         <c>512</c>
         <c>Autonomous System</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="node_desc_tlvs"></xref></c>
 
         <c>513</c>
         <c>BGP Identifier</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="node_desc_tlvs"></xref></c>
 
         <c>514</c>
         <c>ISO Node-ID</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="node_desc_tlvs"></xref></c>
 
         <c>515</c>
         <c>IPv4 Router-ID</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="node_desc_tlvs"></xref></c>
 
         <c>516</c>
         <c>IPv6 Router-ID</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="node_desc_tlvs"></xref></c>
 
         <c>517</c>
         <c>Area ID</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="node_desc_tlvs"></xref></c>
 
         <c>518</c>
         <c>Multi-Topology ID</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="node_desc_tlvs"></xref></c>
 
         <!-- Link State Attribute TLVs -->
@@ -1828,17 +1866,17 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
         <!-- Node Attributes TLVs -->
         <c>1024</c>
         <c>Node Flag Bits</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="NODEFLAGBITS"></xref></c>
 
         <c>1025</c>
         <c>OSPF Specific Node Properties</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="OSPFSPECIFICNODE"></xref></c>
 
         <c>1026</c>
         <c>IS-IS Specific Node Properties</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="ISISSPECIFICNODE"></xref></c>
 
         <c>1027</c>
@@ -1880,55 +1918,66 @@ this makes further extensiosn easier - suggest to put it under the prefix descri
 
         <c>1094</c>
         <c>MPLS Protocol Mask</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="MPLSPROTOTLV"></xref></c>
 
         <c>1095</c>
         <c>Metric</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="METTLV"></xref></c>
 
         <c>1096</c>
         <c>Shared Risk Link Group</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="SRLGTLV"></xref></c>
 
         <c>1097</c>
         <c>OSPF specific link attribute</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="OSPFLINKSPECIFIC"></xref></c>
 
         <c>1098</c>
         <c>IS-IS Specific Link Attribute</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="ISISLINKSPECIFIC"></xref></c>
 
         <!-- Prefix Attributes TLVs -->
 
         <c>1152</c>
         <c>IGP Flags</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="IGPFLAGS"></xref></c>
 
         <c>1153</c>
         <c>Route Tag</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="RFC5130"></xref></c>
 
         <c>1154</c>
         <c>Extended Tag</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="RFC5130"></xref></c>
 
         <c>1155</c>
         <c>Prefix Metric</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="RFC5305"></xref></c>
 
         <c>1156</c>
         <c>OSPF Forwarding Address</c>
-        <c>--</c>
+        <c>---</c>
         <c><xref target="RFC2328"></xref></c>
+
+        <c>1157</c>
+        <c>OSPF Specific Prefix Attribute</c>
+        <c>---</c>
+        <c><xref target="IGPSPECIFICPRFX"></xref></c>
+
+        <c>1158</c>
+        <c>IS-IS Specific Prefix Attribute</c>
+        <c>---</c>
+        <c><xref target="IGPSPECIFICPRFX"></xref></c>
+
       </texttable>
     </section>
 
