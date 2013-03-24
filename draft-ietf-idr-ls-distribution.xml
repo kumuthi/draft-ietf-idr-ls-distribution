@@ -1626,14 +1626,13 @@ BGP ID and the AS#: should we mandate it? -->
       <t>This document requests a code point from the BGP Path Attributes
       registry.</t>
 
-      <t>This document requests creation of a new registry for node anchor,
-      link descriptor and link attribute TLVs. Values 0-255 are reserved.
-      Values 256-65535 will be used for Codepoints. The registry will be
-      initialized as shown in <xref target="table_link_descriptor_tlv"></xref>
-      and <xref target="table_link_attribute_tlv"></xref>. Allocations within
-      the registry will require documentation of the proposed use of the
-      allocated value and approval by the Designated Expert assigned by the
-      IESG (see <xref target="RFC5226"></xref>).</t>
+      <t>This document requests creation of a new registry for node anchor, link
+      descriptor and link attribute TLVs. Values 0-255 are reserved.  Values
+      256-65535 will be used for Codepoints. The registry will be initialized as
+      shown in <xref target="BGPLSCODEPOINTS"/>. Allocations within the registry
+      will require documentation of the proposed use of the allocated value and
+      approval by the Designated Expert assigned by the IESG (see <xref
+      target="RFC5226"></xref>).</t>
 
       <t>Note to RFC Editor: this section may be removed on publication as an
       RFC.</t>
