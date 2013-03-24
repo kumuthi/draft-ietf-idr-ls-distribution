@@ -690,9 +690,9 @@ BGP ID and the AS#: should we mandate it? -->
               </t>
 		
               <t hangText="MT-ID:">carries the Multi Topology ID for the link,
-              node or prefix. The semantics of the Multi Topology ID are defined
-              in <xref target="RFC5120">RFC5120, Section 7.2</xref>, and the
-              OSPF Multi Topology ID), defined in <xref
+              node or prefix. Semantics of the IS-IS Multi Topology ID are
+              defined in <xref target="RFC5120">RFC5120, Section 7.2</xref>.
+              Semantics of the OSPF Multi Topology ID are defined in <xref
               target="RFC4915">RFC4915, Section 3.7</xref>. If the value in the
               Multi Topology ID TLV is derived from OSPF, then the upper 9 bits
               of the Multi Topology ID are set to 0.
@@ -967,8 +967,8 @@ BGP ID and the AS#: should we mandate it? -->
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  //                        Flags (variable)                     //
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |O T E A          |  
+  +-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
 
@@ -981,20 +981,24 @@ BGP ID and the AS#: should we mandate it? -->
               <ttcol align="left">Reference</ttcol>
 
               <c>0</c>
-              <c>Overload Bit</c>
+              <c>Overload Bit (O)</c>
               <c><xref target="RFC1195"></xref></c>
 
               <c>1</c>
-              <c>Attached Bit</c>
+              <c>Attached Bit (T)</c>
               <c><xref target="RFC1195"></xref></c>
 
               <c>2</c>
-              <c>External Bit</c>
+              <c>External Bit (E)</c>
               <c><xref target="RFC2328"></xref></c>
 
               <c>3</c>
-              <c>ABR Bit</c>
+              <c>ABR Bit (A)</c>
               <c><xref target="RFC2328"></xref></c>
+              
+              <c>4-7</c>
+              <c>Reserved for future use</c>
+              <c></c>
             </texttable>
           </section>
 
@@ -1019,7 +1023,7 @@ BGP ID and the AS#: should we mandate it? -->
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  //            OSPF specific node properties (variable)         //
+  //           OSPF specific node properties (variable)          //
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
@@ -1044,7 +1048,7 @@ BGP ID and the AS#: should we mandate it? -->
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |              Type             |             Length            | 
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  //           IS-IS specific node properties (variable)         //
+  //          IS-IS specific node properties (variable)          //
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   </artwork>
             </figure>
