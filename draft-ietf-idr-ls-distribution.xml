@@ -1341,12 +1341,12 @@ BGP ID and the AS#: should we mandate it? -->
             <c>1157</c>
             <c>OSPF Specific Prefix Attribute</c>
             <c>variable</c>
-            <c><xref target="IGPSPECIFICPRFXTLV"></xref></c>
+            <c><xref target="IGPSPECIFICPRFX"></xref></c>
 
             <c>1158</c>
             <c>IS-IS Specific Prefix Attribute</c>
             <c>variable</c>
-            <c><xref target="IGPSPECIFICPRFXTLV"></xref></c>
+            <c><xref target="IGPSPECIFICPRFX"></xref></c>
           </texttable>
 
           <section anchor="IGPFLAGS" title="IGP Flags TLV">
@@ -1485,7 +1485,7 @@ BGP ID and the AS#: should we mandate it? -->
 
             <t>The OSPF and IS-IS Specific Prefix information TLVs contain
             prefix specific data carried in OSPF and IS-IS, respectively.  The
-            format of the TLV is as follow:s</t>
+            format of the TLV is as follows:</t>
 
             <figure anchor="IGPSPECIFICPRFXTLV"
                     title="OSPF and IS-IS Prefix Specific Data TLV Format">
@@ -1500,8 +1500,8 @@ BGP ID and the AS#: should we mandate it? -->
               </artwork>
             </figure>
 
-            <t>Length is 4 for an IPv4 forwarding address an 16 for an IPv6
-            forwarding address.</t>
+            <t>Type is as specified in <xref target="prefix-attribute_tlv"/> and
+            Length is variable.</t>
           </section>
         </section>
       </section>
