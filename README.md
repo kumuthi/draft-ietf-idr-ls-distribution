@@ -1,9 +1,7 @@
 draft-ietf-idr-ls-distribution
 ==============================
 
-this is the XML source for draft-ietf-idr-ls-distribution.
-
-[IETF draft](http://tools.ietf.org/id/draft-ietf-idr-ls-distribution)
+this is the XML source for [draft-ietf-idr-ls-distribution](http://tools.ietf.org/id/draft-ietf-idr-ls-distribution).
 
 This repo has been set up to foster collaboration between:
 
