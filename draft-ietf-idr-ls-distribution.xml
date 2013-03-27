@@ -686,7 +686,9 @@ BGP ID and the AS#: should we mandate it? -->
               Pseudonode Byte to non-zero for a Node representing a LAN. When
               encoding a Pseudonode for OSPF the router-ID is the IP Address of
               the Designated Router.  To disambiguate The Pseudonode with a
-              non-Pseudonode router the Pseudonode Byte should be set to 1.</t>
+              non-Pseudonode router the Pseudonode Byte should be set to 1.
+	      Note that the IPv6 Router ID applies only when 128-Bit
+	      TE-IDs are generated as per <xref target="RFC6119">RFC 6119</xref>.</t>
 
               <t hangText="Area ID:">It is used to identify the 32 Bit area to
               which the NLRI belongs. Area Identifier allows the different NLRIs
