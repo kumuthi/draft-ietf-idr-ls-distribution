@@ -85,7 +85,7 @@
       </address>
     </author>
 
-    <date day="20" month="March" year="2013" />
+    <date day="26" month="March" year="2013" />
 
     <workgroup>Inter-Domain Routing</workgroup>
 
@@ -633,7 +633,7 @@ BGP ID and the AS#: should we mandate it? -->
 
               <c>515</c>
               <c>IPv4 Router-ID + PSN</c>
-              <c>5</c>
+              <c>8</c>
 
               <c>516</c>
               <c>IPv6 Router-ID + PSN</c>
@@ -664,15 +664,19 @@ BGP ID and the AS#: should we mandate it? -->
               advertised. The PSN octet MUST be zero for non-LAN
               "Pseudonodes".</t>
 
-              <t hangText="IPv4 Router ID:">opaque value (can be an IPv4 address
-              or an 32 Bit router ID) followed by a Pseudonode octet. The
-              Pseudonode octet is used to discriminate a Pseudonode from a Real
-              Node for LANs.  An Implementation MUST set the Pseudonode Byte to
-              zero for Non Pseudonodes. An Implementation SHOULD set the
-              Pseudonode Byte to non-zero for a Node representing a LAN. When
-              encoding a Pseudonode for OSPF the router-ID is the IP Address of
-              the Designated Router.  To disambiguate The Pseudonode with a
-              non-Pseudonode router the Pseudonode Byte should be set to 1.</t>
+              <t hangText="IPv4 Router ID:">opaque value (can be an
+	      IPv4 address or an 32 Bit router ID) followed by 4 octets of
+	      Pseudonode. The Pseudonode octets are used to discriminate a
+	      Pseudonode from a Real Node for LANs.  An Implementation MUST set the
+	      Pseudonode octets to zero for Non Pseudonodes. An Implementation
+	      SHOULD set the Pseudonode Byte to non-zero for a Node representing a
+	      LAN. When encoding a Pseudonode for OSPF the router-ID is the IP
+	      Address of the Designated Router.  To disambiguate The Pseudonode with
+	      a non-Pseudonode router the Pseudonode octets should be set to 1.
+	      When encoding a Pseudonode for OSPFv3 the router-ID is the IP Address
+	      of the Designated Router. To disambiguate The Pseudonode with a
+	      non-Pseudonode router the Pseudonode octets should bet set to the
+	      interface-ID of the Network LSA.</t>
 
               <t hangText="IPv6 Router ID:">opaque value (can be an IPv6 address
               or an 128 Bit router ID) followed by a Pseudonode octet. The
